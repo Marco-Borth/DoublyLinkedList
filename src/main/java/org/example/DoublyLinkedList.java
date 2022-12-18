@@ -34,95 +34,93 @@ public class DoublyLinkedList {
         int rand_int = 1 + rand.nextInt(99);
 
         if (list.front != null) {
-            list.backInsert(list, rand_int);
+            list.push_front(rand_int);
         } else{
-            int rand_index = rand.nextInt(node_count+1) - 1;
-            list.backInsert(list, rand_int);
+            int rand_index = rand.nextInt(node_count+1);
+            list.insert(rand_int, rand_index);
         }
 
         return list;
     }
 
     // Method to insert a new node
-    public DoublyLinkedList backInsert(DoublyLinkedList list, int data) {
+    public void push_back(int data) {
         // Create a new node with given data
         DoublyLinkedList.Node new_node = new DoublyLinkedList.Node(data);
 
         // If the Linked List is empty,
         // then make the new node as front and back
-        if (list.front == null) {
-            list.front = new_node;
-            list.back = new_node;
+        if (front == null) {
+            front = new_node;
+            back = new_node;
         } else {
 
             // Else insert and link the new node
             // to the list back.
-            new_node.prev = list.back;
-            list.back.next = new_node;
-            list.back = new_node;
+            new_node.prev = back;
+            back.next = new_node;
+            back = new_node;
         }
 
-        // Return the list by front
+        // increment node count.
         node_count++;
-        return list;
     }
 
-    public DoublyLinkedList frontInsert(DoublyLinkedList list, int data) {
+    public void push_front(int data) {
         // Create a new node with given data
         DoublyLinkedList.Node new_node = new DoublyLinkedList.Node(data);
 
         // If the Linked List is empty,
         // then make the new node as front and back
-        if (list.back == null) {
-            list.front = new_node;
-            list.back = new_node;
+        if (back == null) {
+            front = new_node;
+            back = new_node;
         } else {
             // Else insert and link the new node
             // to the list front.
-            new_node.next = list.front;
-            list.front.prev = new_node;
-            list.front = new_node;
+            new_node.next = front;
+            front.prev = new_node;
+            front = new_node;
         }
 
-        // Return the list by front
+        // increment node count.
         node_count++;
-        return list;
     }
 
-    public DoublyLinkedList indexInsert(DoublyLinkedList list, int data, int index) {
+    public void insert(int data, int index) {
         if (index >= 0 && index <= node_count+1) {
 
             // If the Linked List is empty,
             // then make the new node as front
             if(index == 0) {
                 // Insert node at front if Index is 0.
-                list.frontInsert(list,data);
+                push_front(data);
             } else if (index == node_count+1) {
                 // Insert node at back if Index equals the node_count.
-                list.backInsert(list,data);
+                push_back(data);
             } else {
                 // Create a new node with given data
                 DoublyLinkedList.Node new_node = new DoublyLinkedList.Node(data);
 
-                DoublyLinkedList.Node element = list.front;
-
                 if (index == 1) {
-                    DoublyLinkedList.Node second2front = list.front;
+                    DoublyLinkedList.Node second2front = front;
                     second2front = second2front.next;
 
                     new_node.next = second2front;
-                    new_node.prev = list.front;
+                    new_node.prev = front;
                     front.next = new_node;
                     second2front.prev = new_node;
                 } else if (index == node_count) {
-                    DoublyLinkedList.Node second2back = list.back;
+                    DoublyLinkedList.Node second2back = back;
                     second2back = second2back.prev;
 
                     new_node.prev = second2back;
-                    new_node.next = list.back;
+                    new_node.next = back;
                     back.prev = new_node;
                     second2back.next = new_node;
                 } else {
+                    DoublyLinkedList.Node element = front;
+
                     int i = 1;
                     while ( i < index) {
                         if(element != null) {
@@ -134,7 +132,6 @@ public class DoublyLinkedList {
                     //  insert and link the new node
                     // to the list.
                     DoublyLinkedList.Node nextElement = element.next;
-                    DoublyLinkedList.Node prevElement = element.next;
 
                     new_node.next = element.next;
                     new_node.prev = element;
@@ -142,15 +139,107 @@ public class DoublyLinkedList {
                     nextElement.prev = new_node;
                 }
 
-                // Return the list by front
+                // increment node count.
                 node_count++;
             }
 
         } else {
             // Throw Bounds Error!
         }
+    }
 
-        return list;
+    private void delete_last() {
+        front = null;
+        back = null;
+        node_count = 0;
+    }
+
+    public void delete_front() {
+        if(front != null && back != null) {
+            if(front == back) {
+                delete_last();
+            } else {
+                DoublyLinkedList.Node element = front;
+
+                element = element.next;
+                element.prev = null;
+                front.next = null;
+                front = element;
+
+                node_count--;
+            }
+        }
+    }
+
+    public void delete_back() {
+        if(front != null && back != null) {
+            if(front == back) {
+                delete_last();
+            } else {
+                DoublyLinkedList.Node element = back;
+
+                element = element.prev;
+                element.next = null;
+                back.next = null;
+                back = element;
+
+                node_count--;
+            }
+        }
+    }
+
+    public void delete(int index) {
+        if(front != null && back != null) {
+            if(front == back) {
+                delete_last();
+            } else if (index == 0) {
+                delete_front();
+            } else if (index == node_count) {
+                delete_back();
+            } else if (index == 1) {
+                DoublyLinkedList.Node element = front;
+                element = element.next;
+
+                DoublyLinkedList.Node nextElement = element.next;
+                DoublyLinkedList.Node prevElement = element.prev;
+
+                prevElement.next = nextElement;
+                nextElement.prev = prevElement;
+
+                node_count--;
+            } else if (index == node_count - 1) {
+                DoublyLinkedList.Node element = back;
+                element = element.prev;
+
+                DoublyLinkedList.Node nextElement = element.next;
+                DoublyLinkedList.Node prevElement = element.prev;
+
+                prevElement.next = nextElement;
+                nextElement.prev = prevElement;
+
+                node_count--;
+            } else {
+                DoublyLinkedList.Node element = front;
+
+                int i = 1;
+                while ( i <= index) {
+                    if(element != null) {
+                        element = element.next;
+                    }
+                    i++;
+                }
+
+                //  insert and link the new node
+                // to the list.
+                DoublyLinkedList.Node nextElement = element.next;
+                DoublyLinkedList.Node prevElement = element.prev;
+
+                prevElement.next = nextElement;
+                nextElement.prev = prevElement;
+
+                node_count--;
+            }
+        }
     }
 
     // Method to print the DoublyLinkedList.
@@ -168,7 +257,7 @@ public class DoublyLinkedList {
         // Traverse through the DoublyLinkedList
         while (currNode != null) {
             if(length % 10 == 0) {
-                System.out.print("\n\t");
+                System.out.print("\n\t\t");
             }
 
             // Print the data at current node
@@ -180,7 +269,7 @@ public class DoublyLinkedList {
         }
         System.out.print("\n<== Back\n");
 
-        System.out.print("Length: "+length+"\n");
+        System.out.print("Reporting Length: "+length+"\n");
         System.out.print("Expected Length: "+node_count+"\n");
     }
 
@@ -193,7 +282,7 @@ public class DoublyLinkedList {
         // Traverse through the DoublyLinkedList
         while (currNode != null) {
             if(length % 10 == 0) {
-                System.out.print("\n\t");
+                System.out.print("\n\t\t");
             }
 
             // Print the data at current node
@@ -205,7 +294,7 @@ public class DoublyLinkedList {
         }
         System.out.print("\n<== Front\n");
 
-        System.out.print("Length: "+length+"\n");
+        System.out.print("Reporting Length: "+length+"\n");
         System.out.print("Expected Length: "+node_count+"\n");
     }
 }

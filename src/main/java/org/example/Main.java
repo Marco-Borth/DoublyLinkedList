@@ -28,26 +28,39 @@ public class Main {
             command = br.readLine();
             System.out.println("You have entered: " + command);
 
-            if (command.contains("insert") ) {
+            if (command.contains("insert") || command.contains("push") ) {
                 if (command.contains("front")) {
                     int number = generateRandomNumber();
-                    list.frontInsert(list, number);
+                    list.push_front(number);
                 } else if (command.contains("back")) {
                     int number = generateRandomNumber();
-                    list.backInsert(list, number);
+                    list.push_back(number);
                 } else if (command.contains("index")) {
                     System.out.println("\nEnter a valid index value?");
                     int index = Integer.parseInt(br.readLine());
                     int number = generateRandomNumber();
-                    list.indexInsert(list, number, index);
+                    list.insert(number, index);
                 } else {
                     list.insertRandomNode(list);
                 }
 
                 list.printList(list);
-            }
+            } else if (command.contains("delete") || command.contains("remove") ) {
+                if (command.contains("front")) {
+                    list.delete_front();
+                } else if (command.contains("back")) {
+                    list.delete_back();
+                } else if (command.contains("index")) {
+                    System.out.println("\nEnter a valid index value?");
+                    int index = Integer.parseInt(br.readLine());
+                    list.delete(index);
+                }
 
-            if (command.contains("print") ) {
+                list.printList(list);
+            } else if (command.equals("pop")) {
+                list.delete_back();
+                list.printList(list);
+            } else if (command.contains("print") ) {
                 if (command.contains("front to back") ||
                         command.contains("f2b")) {
                     list.printF2B(list);
@@ -64,8 +77,9 @@ public class Main {
     public static void printCommands() {
         System.out.println("\nWhat would you like to do?");
 
-        System.out.println("1. Insert a random Node to the string");
-        System.out.println("2. Print all the Nodes in the list");
+        System.out.println("1. Insert a random Node to the list");
+        System.out.println("2. Delete a Node from the list");
+        System.out.println("3. Print all the Nodes in the list");
         System.out.println("Q. Press Q to quit");
     }
 
