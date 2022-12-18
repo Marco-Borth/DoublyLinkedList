@@ -106,41 +106,40 @@ public class DoublyLinkedList {
 
                 DoublyLinkedList.Node element = list.front;
 
-                /*
                 if (index == 1) {
-                    DoublyLinkedList.Node second = list.front;
-                    second = second.next;
+                    DoublyLinkedList.Node second2front = list.front;
+                    second2front = second2front.next;
 
-                    new_node.next = second.next;
+                    new_node.next = second2front;
                     new_node.prev = list.front;
-                    second.prev = new_node;
+                    front.next = new_node;
+                    second2front.prev = new_node;
+                } else if (index == node_count) {
+                    DoublyLinkedList.Node second2back = list.back;
+                    second2back = second2back.prev;
+
+                    new_node.prev = second2back;
+                    new_node.next = list.back;
+                    back.prev = new_node;
+                    second2back.next = new_node;
                 } else {
-
-                }
-                */
-
-                int i = 1;
-                while ( i < index) {
-                    if(element != null) {
-                        element = element.next;
+                    int i = 1;
+                    while ( i < index) {
+                        if(element != null) {
+                            element = element.next;
+                        }
+                        i++;
                     }
-                    i++;
-                }
 
-                element = element.prev;
+                    //  insert and link the new node
+                    // to the list.
+                    DoublyLinkedList.Node nextElement = element.next;
+                    DoublyLinkedList.Node prevElement = element.next;
 
-                //  insert and link the new node
-                // to the list.
-                new_node.next = element.next;
-                new_node.prev = element.prev;
-                element.prev = new_node;
-
-                if(index == 1) {
-                    list.front = new_node;
-                }
-
-                if(index == node_count) {
-                    list.back = new_node;
+                    new_node.next = element.next;
+                    new_node.prev = element;
+                    element.next = new_node;
+                    nextElement.prev = new_node;
                 }
 
                 // Return the list by front
