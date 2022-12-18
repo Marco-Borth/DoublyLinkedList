@@ -35,6 +35,11 @@ public class Main {
                 } else if (command.contains("back")) {
                     int number = generateRandomNumber();
                     list.backInsert(list, number);
+                } else if (command.contains("index")) {
+                    System.out.println("\nEnter a valid index value?");
+                    int index = Integer.parseInt(br.readLine());
+                    int number = generateRandomNumber();
+                    list.indexInsert(list, number, index);
                 } else {
                     list.insertRandomNode(list);
                 }

@@ -8,7 +8,7 @@ import java.util.Random;
 public class DoublyLinkedList {
     DoublyLinkedList.Node front; // front of list
     DoublyLinkedList.Node back; // front of list
-    int listLength = 0;
+    int node_count = 0;
 
     // Doubly Linked list Node.
     class Node {
@@ -36,7 +36,7 @@ public class DoublyLinkedList {
         if (list.front != null) {
             list.backInsert(list, rand_int);
         } else{
-            int rand_index = rand.nextInt(listLength);
+            int rand_index = rand.nextInt(node_count+1) - 1;
             list.backInsert(list, rand_int);
         }
 
@@ -44,17 +44,17 @@ public class DoublyLinkedList {
     }
 
     // Method to insert a new node
-    public DoublyLinkedList backInsert(DoublyLinkedList list, int data)
-    {
+    public DoublyLinkedList backInsert(DoublyLinkedList list, int data) {
         // Create a new node with given data
         DoublyLinkedList.Node new_node = new DoublyLinkedList.Node(data);
 
         // If the Linked List is empty,
-        // then make the new node as front
+        // then make the new node as front and back
         if (list.front == null) {
             list.front = new_node;
             list.back = new_node;
         } else {
+
             // Else insert and link the new node
             // to the list back.
             new_node.prev = list.back;
@@ -63,7 +63,7 @@ public class DoublyLinkedList {
         }
 
         // Return the list by front
-        listLength++;
+        node_count++;
         return list;
     }
 
@@ -72,10 +72,10 @@ public class DoublyLinkedList {
         DoublyLinkedList.Node new_node = new DoublyLinkedList.Node(data);
 
         // If the Linked List is empty,
-        // then make the new node as back
+        // then make the new node as front and back
         if (list.back == null) {
-            list.back = new_node;
             list.front = new_node;
+            list.back = new_node;
         } else {
             // Else insert and link the new node
             // to the list front.
@@ -85,7 +85,72 @@ public class DoublyLinkedList {
         }
 
         // Return the list by front
-        listLength++;
+        node_count++;
+        return list;
+    }
+
+    public DoublyLinkedList indexInsert(DoublyLinkedList list, int data, int index) {
+        if (index >= 0 && index <= node_count+1) {
+
+            // If the Linked List is empty,
+            // then make the new node as front
+            if(index == 0) {
+                // Insert node at front if Index is 0.
+                list.frontInsert(list,data);
+            } else if (index == node_count+1) {
+                // Insert node at back if Index equals the node_count.
+                list.backInsert(list,data);
+            } else {
+                // Create a new node with given data
+                DoublyLinkedList.Node new_node = new DoublyLinkedList.Node(data);
+
+                DoublyLinkedList.Node element = list.front;
+
+                /*
+                if (index == 1) {
+                    DoublyLinkedList.Node second = list.front;
+                    second = second.next;
+
+                    new_node.next = second.next;
+                    new_node.prev = list.front;
+                    second.prev = new_node;
+                } else {
+
+                }
+                */
+
+                int i = 1;
+                while ( i < index) {
+                    if(element != null) {
+                        element = element.next;
+                    }
+                    i++;
+                }
+
+                element = element.prev;
+
+                //  insert and link the new node
+                // to the list.
+                new_node.next = element.next;
+                new_node.prev = element.prev;
+                element.prev = new_node;
+
+                if(index == 1) {
+                    list.front = new_node;
+                }
+
+                if(index == node_count) {
+                    list.back = new_node;
+                }
+
+                // Return the list by front
+                node_count++;
+            }
+
+        } else {
+            // Throw Bounds Error!
+        }
+
         return list;
     }
 
@@ -117,6 +182,7 @@ public class DoublyLinkedList {
         System.out.print("\n<== Back\n");
 
         System.out.print("Length: "+length+"\n");
+        System.out.print("Expected Length: "+node_count+"\n");
     }
 
     public void printB2F(DoublyLinkedList list) {
@@ -141,5 +207,6 @@ public class DoublyLinkedList {
         System.out.print("\n<== Front\n");
 
         System.out.print("Length: "+length+"\n");
+        System.out.print("Expected Length: "+node_count+"\n");
     }
 }
