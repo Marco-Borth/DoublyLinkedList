@@ -1,8 +1,5 @@
 package org.example;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Random;
 
 public class DoublyLinkedList {
@@ -148,6 +145,29 @@ public class DoublyLinkedList {
         }
     }
 
+    public Node getNode(int index) {
+        if (index >= 0 && index <= node_count) {
+            if(index == 0) {
+                return front;
+            } else if (index == node_count) {
+                return back;
+            } else {
+                DoublyLinkedList.Node element = front;
+
+                int i = 0;
+                while ( i < index) {
+                    if(element != null) {
+                        element = element.next;
+                    }
+                    i++;
+                }
+
+                return element;
+            }
+        }
+        return null;
+    }
+
     private void delete_last() {
         front = null;
         back = null;
@@ -243,58 +263,60 @@ public class DoublyLinkedList {
     }
 
     // Method to print the DoublyLinkedList.
-    public void printList(DoublyLinkedList list) {
-        list.printF2B(list);
+    public String printList() {
+        return printF2B();
     }
 
-    public void printF2B(DoublyLinkedList list)
+    public String printF2B()
     {
-        DoublyLinkedList.Node currNode = list.front;
+        DoublyLinkedList.Node currNode = front;
         int length = 0;
 
-        System.out.print("DoublyLinkedList:\nFront ==> ");
+        String output = "Front ==> ";
 
         // Traverse through the DoublyLinkedList
         while (currNode != null) {
             if(length % 10 == 0) {
-                System.out.print("\n\t\t");
+                output += "\n\t\t";
             }
 
             // Print the data at current node
-            System.out.print("\t" + currNode.data);
+            output += "\t" + currNode.data;
 
             // Go to next node
             currNode = currNode.next;
             length++;
         }
-        System.out.print("\n<== Back\n");
+        output += "\n<== Back";
+        return output;
 
-        System.out.print("Reporting Length: "+length+"\n");
-        System.out.print("Expected Length: "+node_count+"\n");
+        //System.out.print("Reporting Length: "+length+"\n");
+        //System.out.print("Expected Length: "+node_count+"\n");
     }
 
-    public void printB2F(DoublyLinkedList list) {
-        DoublyLinkedList.Node currNode = list.back;
+    public String printB2F() {
+        DoublyLinkedList.Node currNode = back;
         int length = 0;
 
-        System.out.print("DoublyLinkedList:\nBack ==> ");
+        String output = "Back ==> ";
 
         // Traverse through the DoublyLinkedList
         while (currNode != null) {
             if(length % 10 == 0) {
-                System.out.print("\n\t\t");
+                output += "\n\t\t";
             }
 
             // Print the data at current node
-            System.out.print("\t" + currNode.data);
+            output += "\t" + currNode.data;
 
             // Go to previous node
             currNode = currNode.prev;
             length++;
         }
-        System.out.print("\n<== Front\n");
+        output += "\n<== Front";
+        return output;
 
-        System.out.print("Reporting Length: "+length+"\n");
-        System.out.print("Expected Length: "+node_count+"\n");
+        //System.out.print("Reporting Length: "+length+"\n");
+        //System.out.print("Expected Length: "+node_count+"\n");
     }
 }
