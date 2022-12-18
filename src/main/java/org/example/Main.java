@@ -31,16 +31,15 @@ public class Main {
             System.out.println("You have entered: " + command);
 
             if (command.contains("insert") || command.contains("push") ) {
+                String number =  Integer.toString( generateRandomNumber() );
+
                 if (command.contains("front")) {
-                    int number = generateRandomNumber();
                     list.push_front(number);
                 } else if (command.contains("back")) {
-                    int number = generateRandomNumber();
                     list.push_back(number);
                 } else if (command.contains("index")) {
                     System.out.println("\nEnter a valid index value?");
                     int index = Integer.parseInt(br.readLine());
-                    int number = generateRandomNumber();
                     list.insert(number, index);
                 } else {
                     list.insertRandomNode(list);
@@ -146,14 +145,14 @@ public class Main {
     public static DoublyLinkedList loadListFromFile(DoublyLinkedList list, String fileName) throws IOException {
         String data = "";
         data = new String(Files.readAllBytes(Paths.get(fileName)));
-        String[] numValues = data.split("\t");
+        String[] fileNodes = data.split("\t");
 
         //System.out.print("\n" + numValues.length +"\n");
         list.clear();
         int index = 0;
-        for (int i = 4; i < numValues.length - 2; i++) {
+        for (int i = 4; i < fileNodes.length - 2; i++) {
             //System.out.print(numValues[i] + " ");
-            list.push_back( Integer.parseInt(numValues[i]) );
+            list.push_back( fileNodes[i] );
             index++;
 
             /*

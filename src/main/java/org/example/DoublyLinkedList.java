@@ -10,12 +10,12 @@ public class DoublyLinkedList {
     // Doubly Linked list Node.
     class Node {
 
-        int data;
+        String data;
         DoublyLinkedList.Node next;
         DoublyLinkedList.Node prev;
 
         // Constructor
-        Node(int d)
+        Node(String d)
         {
             data = d;
             next = null;
@@ -28,10 +28,10 @@ public class DoublyLinkedList {
         Random rand = new Random();
 
         // Generate random integers in range 1 to 99
-        int rand_int = 1 + rand.nextInt(99);
+        String rand_int = Integer.toString( 1 + rand.nextInt(99) ) ;
 
         if (list.front != null) {
-            list.push_front(rand_int);
+            list.push_front( rand_int);
         } else{
             int rand_index = rand.nextInt(node_count+1);
             list.insert(rand_int, rand_index);
@@ -41,7 +41,7 @@ public class DoublyLinkedList {
     }
 
     // Method to insert a new node
-    public void push_back(int data) {
+    public void push_back(String data) {
         // Create a new node with given data
         DoublyLinkedList.Node new_node = new DoublyLinkedList.Node(data);
 
@@ -63,7 +63,7 @@ public class DoublyLinkedList {
         node_count++;
     }
 
-    public void push_front(int data) {
+    public void push_front(String data) {
         // Create a new node with given data
         DoublyLinkedList.Node new_node = new DoublyLinkedList.Node(data);
 
@@ -84,7 +84,7 @@ public class DoublyLinkedList {
         node_count++;
     }
 
-    public void insert(int data, int index) {
+    public void insert(String data, int index) {
         if (index >= 0 && index <= node_count+1) {
 
             // If the Linked List is empty,
