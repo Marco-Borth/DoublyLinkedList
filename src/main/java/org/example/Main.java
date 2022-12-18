@@ -17,7 +17,12 @@ public class Main {
         System.out.println("Here is a Doubly Linked-List Generate for your to start with.\n");
 
         for(int i = 0; i < 10; i++) {
-            list.insertRandomNode(list);
+            Random rand = new Random();
+
+            int rand_index = rand.nextInt(list.getLength() + 1);
+
+            String input =  Integer.toString( generateRandomNumber() );
+            list.push_back(input);
         }
 
         // Print the DoublyLinkedList
@@ -31,18 +36,32 @@ public class Main {
             System.out.println("You have entered: " + command);
 
             if (command.contains("insert") || command.contains("push") ) {
-                String number =  Integer.toString( generateRandomNumber() );
+                String input = "";
+
+                if (command.contains("random")) {
+                    input =  Integer.toString( generateRandomNumber() );
+                } else {
+                    System.out.println("\nEnter string input:");
+
+                    // Step 1:  Create an object of FileOutputStream
+                    input = br.readLine();
+                }
+
+
 
                 if (command.contains("front")) {
-                    list.push_front(number);
+                    list.push_front(input);
                 } else if (command.contains("back")) {
-                    list.push_back(number);
+                    list.push_back(input);
                 } else if (command.contains("index")) {
                     System.out.println("\nEnter a valid index value?");
                     int index = Integer.parseInt(br.readLine());
-                    list.insert(number, index);
+                    list.insert(input, index);
                 } else {
-                    list.insertRandomNode(list);
+                    Random rand = new Random();
+
+                    int rand_index = rand.nextInt(list.getLength() + 1);
+                    list.insert(input, rand_index);
                 }
 
                 printList(list,"");

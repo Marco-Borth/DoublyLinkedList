@@ -23,22 +23,35 @@ public class DoublyLinkedList {
         }
     }
 
-    public DoublyLinkedList insertRandomNode(DoublyLinkedList list) {
-        // create instance of Random class
-        Random rand = new Random();
+    public int getLength() {
+        DoublyLinkedList.Node currNode = front;
+        int length = 0;
 
-        // Generate random integers in range 1 to 99
-        String rand_int = Integer.toString( 1 + rand.nextInt(99) ) ;
+        // Traverse through the DoublyLinkedList
+        while (currNode != null) {
+            // Go to next node
+            currNode = currNode.next;
+            length++;
+        }
+        return length;
+    }
+
+    /*
+    public DoublyLinkedList insertNodeRandomly(DoublyLinkedList list, String input) {
 
         if (list.front != null) {
-            list.push_front( rand_int);
+            list.push_front( input);
         } else{
-            int rand_index = rand.nextInt(node_count+1);
-            list.insert(rand_int, rand_index);
+            // create instance of Random class
+            Random rand = new Random();
+
+            int rand_index = rand.nextInt(getLength() + 1);
+            list.insert(input, rand_index);
         }
 
         return list;
     }
+    */
 
     // Method to insert a new node
     public void push_back(String data) {
@@ -115,7 +128,7 @@ public class DoublyLinkedList {
                     new_node.next = back;
                     back.prev = new_node;
                     second2back.next = new_node;
-                } else {
+                } else  if(true) {
                     DoublyLinkedList.Node element = front;
 
                     int i = 1;
