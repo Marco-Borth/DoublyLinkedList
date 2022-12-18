@@ -168,6 +168,10 @@ public class DoublyLinkedList {
         return null;
     }
 
+    public void clear() {
+        delete_last();
+    }
+
     private void delete_last() {
         front = null;
         back = null;
@@ -272,7 +276,7 @@ public class DoublyLinkedList {
         DoublyLinkedList.Node currNode = front;
         int length = 0;
 
-        String output = "Front ==> ";
+        String output = "\tFront ==>";
 
         // Traverse through the DoublyLinkedList
         while (currNode != null) {
@@ -287,7 +291,7 @@ public class DoublyLinkedList {
             currNode = currNode.next;
             length++;
         }
-        output += "\n<== Back";
+        output += "\n\t<== Back";
         return output;
 
         //System.out.print("Reporting Length: "+length+"\n");
@@ -298,7 +302,7 @@ public class DoublyLinkedList {
         DoublyLinkedList.Node currNode = back;
         int length = 0;
 
-        String output = "Back ==> ";
+        String output = "\tBack ==>";
 
         // Traverse through the DoublyLinkedList
         while (currNode != null) {
@@ -313,7 +317,7 @@ public class DoublyLinkedList {
             currNode = currNode.prev;
             length++;
         }
-        output += "\n<== Front";
+        output += "\n\t<== Front";
         return output;
 
         //System.out.print("Reporting Length: "+length+"\n");

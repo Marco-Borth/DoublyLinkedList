@@ -4,8 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.nio.file.*;
 import java.util.Random;
 
 public class Main {
@@ -57,11 +56,16 @@ public class Main {
                     System.out.println("\nEnter a valid index value?");
                     int index = Integer.parseInt(br.readLine());
                     list.delete(index);
+                } else if (command.contains("all")) {
+                    list.clear();
                 }
 
                 printList(list,"");
             } else if (command.equals("pop")) {
                 list.delete_back();
+                printList(list,"");
+            } else if (command.equals("clear")) {
+                list.clear();
                 printList(list,"");
             } else if (command.contains("print") ) {
                 if (command.contains("front to back")
@@ -103,7 +107,7 @@ public class Main {
                 } else if(listOrder == "backwards") {
 
                     fileData += list.printB2F();
-                    
+
                 }
 
                 // Step 2: Store byte content from string
@@ -114,8 +118,18 @@ public class Main {
 
                 // Print the success message (Optional)
                 System.out.print("\nFile is created successfully with the content.\n");
+            } else if (command.contains("write") ) {
+                System.out.println("\nEnter a file name to save list data:");
+                String fileName = br.readLine();
+
+                list = loadListFromFile(list, fileName);
+                printList(list,"");
             }
         } while (!command.equals("q") || !command.equals("quit"));
+
+        class driver {
+
+        }
     }
 
     public static void printCommands() {
@@ -125,7 +139,32 @@ public class Main {
         System.out.println("2. Delete a Node from the list.");
         System.out.println("3. Print all the Nodes in the list.");
         System.out.println("4. Save list data to a file.");
+        System.out.println("5. Write list data from a file.");
         System.out.println("Q. Press Q to quit.");
+    }
+
+    public static DoublyLinkedList loadListFromFile(DoublyLinkedList list, String fileName) throws IOException {
+        String data = "";
+        data = new String(Files.readAllBytes(Paths.get(fileName)));
+        String[] numValues = data.split("\t");
+
+        //System.out.print("\n" + numValues.length +"\n");
+        list.clear();
+        int index = 0;
+        for (int i = 4; i < numValues.length - 2; i++) {
+            //System.out.print(numValues[i] + " ");
+            list.push_back( Integer.parseInt(numValues[i]) );
+            index++;
+
+            /*
+            if(index % 10 == 0) {
+                System.out.print("\n");
+            }
+            */
+        }
+
+        System.out.println("\nFile data has been saved.\n");
+        return list;
     }
 
     public static void printList(DoublyLinkedList list, String order) {
