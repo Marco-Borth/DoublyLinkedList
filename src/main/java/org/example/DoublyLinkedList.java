@@ -23,36 +23,6 @@ public class DoublyLinkedList {
         }
     }
 
-    public int getLength() {
-        DoublyLinkedList.Node currNode = front;
-        int length = 0;
-
-        // Traverse through the DoublyLinkedList
-        while (currNode != null) {
-            // Go to next node
-            currNode = currNode.next;
-            length++;
-        }
-        return length;
-    }
-
-    /*
-    public DoublyLinkedList insertNodeRandomly(DoublyLinkedList list, String input) {
-
-        if (list.front != null) {
-            list.push_front( input);
-        } else{
-            // create instance of Random class
-            Random rand = new Random();
-
-            int rand_index = rand.nextInt(getLength() + 1);
-            list.insert(input, rand_index);
-        }
-
-        return list;
-    }
-    */
-
     // Method to insert a new node
     public void push_back(String data) {
         // Create a new node with given data
@@ -289,12 +259,12 @@ public class DoublyLinkedList {
         DoublyLinkedList.Node currNode = front;
         int length = 0;
 
-        String output = "\tFront ==>";
+        String output = "\nFront ==>";
 
         // Traverse through the DoublyLinkedList
         while (currNode != null) {
             if(length % 10 == 0) {
-                output += "\n\t\t";
+                output += "\n";
             }
 
             // Print the data at current node
@@ -304,7 +274,7 @@ public class DoublyLinkedList {
             currNode = currNode.next;
             length++;
         }
-        output += "\n\t<== Back";
+        output += "\n<== Back";
         return output;
 
         //System.out.print("Reporting Length: "+length+"\n");
@@ -315,12 +285,12 @@ public class DoublyLinkedList {
         DoublyLinkedList.Node currNode = back;
         int length = 0;
 
-        String output = "\tBack ==>";
+        String output = "\nBack ==>";
 
         // Traverse through the DoublyLinkedList
         while (currNode != null) {
             if(length % 10 == 0) {
-                output += "\n\t\t";
+                output += "\n";
             }
 
             // Print the data at current node
@@ -330,7 +300,7 @@ public class DoublyLinkedList {
             currNode = currNode.prev;
             length++;
         }
-        output += "\n\t<== Front";
+        output += "\n<== Front";
         return output;
 
         //System.out.print("Reporting Length: "+length+"\n");

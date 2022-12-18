@@ -16,10 +16,10 @@ public class Main {
         System.out.println("\nWelcome to the Linked-List Terminal Program.");
         System.out.println("Here is a Doubly Linked-List Generate for your to start with.\n");
 
-        for(int i = 0; i < 10; i++) {
+        for(int i = 0; i < 100; i++) {
             Random rand = new Random();
 
-            int rand_index = rand.nextInt(list.getLength() + 1);
+            int rand_index = rand.nextInt(list.node_count + 1);
 
             String input =  Integer.toString( generateRandomNumber() );
             list.push_back(input);
@@ -60,7 +60,7 @@ public class Main {
                 } else {
                     Random rand = new Random();
 
-                    int rand_index = rand.nextInt(list.getLength() + 1);
+                    int rand_index = rand.nextInt(list.node_count + 1);
                     list.insert(input, rand_index);
                 }
 
@@ -169,10 +169,24 @@ public class Main {
         //System.out.print("\n" + numValues.length +"\n");
         list.clear();
         int index = 0;
-        for (int i = 4; i < fileNodes.length - 2; i++) {
+
+        for (int i = 1; i < fileNodes.length; i++) {
             //System.out.print(numValues[i] + " ");
-            list.push_back( fileNodes[i] );
-            index++;
+            //if(fileNodes[i] != null) {}
+            if(fileNodes[i] != "\0") {
+                if(fileNodes[i].contains("\n")) {
+                    String[] splitStr = fileNodes[i] .split("\n");
+                    for (int j = 0; j < splitStr.length; j++) {
+                        if( !splitStr[j].contains("<== Back") ) {
+                            list.push_back( splitStr[j] );
+                        }
+                    }
+                } else {
+                    list.push_back( fileNodes[i] );
+                }
+
+                index++;
+            }
 
             /*
             if(index % 10 == 0) {
