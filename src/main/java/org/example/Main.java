@@ -136,7 +136,7 @@ public class Main {
 
                 // Print the success message (Optional)
                 System.out.print("\nFile is created successfully with the content.\n");
-            } else if (command.contains("write") ) {
+            } else if (command.contains("write") || command.contains("load") ) {
                 System.out.println("\nEnter a file name to save list data:");
                 String fileName = br.readLine();
 
@@ -144,10 +144,6 @@ public class Main {
                 printList(list,"");
             }
         } while (!command.equals("q") || !command.equals("quit"));
-
-        class driver {
-
-        }
     }
 
     public static void printCommands() {
