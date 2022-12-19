@@ -128,6 +128,18 @@ public class DoublyLinkedList {
         }
     }
 
+    public void swap(int Node1, int Node2) {
+        if( (Node1 >= 0 && Node1 <= node_count)
+            && (Node2 >= 0 && Node2 <= node_count) ) {
+            DoublyLinkedList.Node element1 = getNode(Node1);
+            DoublyLinkedList.Node element2 = getNode(Node2);
+
+            String tempData = element2.data;
+            element2.data = element1.data;
+            element1.data = tempData;
+        }
+    }
+
     public Node getNode(int index) {
         if (index >= 0 && index <= node_count) {
             if(index == 0) {
