@@ -38,8 +38,6 @@ public class Main {
                     input = br.readLine();
                 }
 
-
-
                 if (command.contains("front")) {
                     list.push_front(input);
                 } else if (command.contains("back")) {
@@ -74,7 +72,7 @@ public class Main {
                 } else if (command.contains("index")) {
                     System.out.println("\nEnter a valid index value?");
                     int index = Integer.parseInt(br.readLine());
-                    list.delete(index);
+                    list.deleteAtIndex(index);
                 } else if (command.contains("all")) {
                     list.clear();
                 }
@@ -153,13 +151,29 @@ public class Main {
                     listOrder = "reverse";
                 }
 
-                // Use Selection Sort Algorithm to sort list in selected.
-                if (listOrder.equals("desc")) {
-                    list = selectionSort(list, "desc");
-                } else if (listOrder.equals("reverse")) {
-                    list = selectionSort(list, "reverse");
+                if ( command.contains("selection")
+                        || command.contains("selectionsort")
+                        || command.contains("selection sort") ) {
+
+                    // Use Selection Sort Algorithm to sort list in selected.
+                    if (listOrder.equals("desc")) {
+                        list = selectionSort(list, "desc");
+                    } else if (listOrder.equals("reverse")) {
+                        list = selectionSort(list, "reverse");
+                    } else {
+                        list = selectionSort(list, "asc");
+                    }
                 } else {
-                    list = selectionSort(list, "asc");
+
+                    // Use Shaker Sort Algorithm to sort list in selected.
+                    if (listOrder.equals("desc")) {
+                        list = shakerSort(list, "desc");
+                    } else if (listOrder.equals("reverse")) {
+                        list = shakerSort(list, "reverse");
+                    } else {
+                        list = shakerSort(list, "asc");
+                    }
+
                 }
 
                 printList(list,"");
@@ -167,6 +181,7 @@ public class Main {
                 System.out.println("\nEnter how many nodes the new list will have:");
                 int newLength = Integer.parseInt(br.readLine());
 
+                list.clear();
                 for(int i = 0; i < newLength; i++) {
                     String input =  Integer.toString( generateRandomNumber() );
                     list.push_back(input);
@@ -174,6 +189,8 @@ public class Main {
 
                 System.out.println("\nSUCCESS! A new Doubly Linked-List has been generated:\n");
                 printList(list,"");
+            } else {
+                System.out.println("\nERROR! Command not Valid!\n");
             }
         } while (!command.equals("q") || !command.equals("quit"));
     }
@@ -232,9 +249,8 @@ public class Main {
     public static DoublyLinkedList selectionSort(DoublyLinkedList list, String listOrder) throws UnsupportedEncodingException {
         // Use Selection Sort Algorithm to sort list in selected.
         if (listOrder.equals("desc")) {
-
             for (int i  = list.node_count; i >= 0; i--) {
-                if(i % 100 == 0) {
+                if(i % 10 == 0) {
                     System.out.println("element at index [" + i + "] has being swapped.");
                 }
 
@@ -244,17 +260,8 @@ public class Main {
                     String minTempdata = list.getNode(min_Node).data;
                     boolean isLower = false;
 
-                    try {
-                        Integer.parseInt(list.getNode(j).data);
-                    } catch (NumberFormatException ex) {
-                        list.getNode(j).data = "" + Integer.MAX_VALUE;
-                    }
-
-                    try {
-                        Integer.parseInt(list.getNode(min_Node).data);
-                    } catch (NumberFormatException ex) {
-                        list.getNode(min_Node).data = "" + Integer.MAX_VALUE;
-                    }
+                    list.getNode(j).data = NaNCheck(list.getNode(j).data);
+                    list.getNode(min_Node).data = NaNCheck(list.getNode(min_Node).data);
 
                     if ( Integer.parseInt(list.getNode(j).data)
                             < Integer.parseInt(list.getNode(min_Node).data) ) {
@@ -271,14 +278,10 @@ public class Main {
 
                 // swap max element with nth element in list.
                 list.swap(min_Node, i);
-
-
             }
-
         } else if (listOrder.equals("asc")) {
-
             for (int i  = list.node_count; i >= 0; i--) {
-                if(i % 100 == 0) {
+                if(i % 10 == 0) {
                     System.out.println("element at index [" + i + "] is being swapped.");
                 }
 
@@ -288,17 +291,8 @@ public class Main {
                     String maxTempdata = list.getNode(max_Node).data;
                     boolean isHigher = false;
 
-                    try {
-                        Integer.parseInt(list.getNode(j).data);
-                    } catch (NumberFormatException ex) {
-                        list.getNode(j).data = "" + Integer.MAX_VALUE;
-                    }
-
-                    try {
-                        Integer.parseInt(list.getNode(max_Node).data);
-                    } catch (NumberFormatException ex) {
-                        list.getNode(max_Node).data = "" + Integer.MAX_VALUE;
-                    }
+                    list.getNode(j).data = NaNCheck(list.getNode(j).data);
+                    list.getNode(max_Node).data = NaNCheck(list.getNode(max_Node).data);
 
                     if ( Integer.parseInt(list.getNode(j).data)
                             > Integer.parseInt(list.getNode(max_Node).data) ) {
@@ -315,9 +309,115 @@ public class Main {
 
                 // swap max element with nth element in list.
                 list.swap(max_Node, i);
-
-
             }
+        } else if (listOrder.equals("reverse")) {
+            // Reverse the order of the nodes sorted or otherwise.
+            DoublyLinkedList newlist = new DoublyLinkedList();
+
+            for(int i = 0; i < list.node_count; i++) {
+                newlist.push_front(list.getNode(i).data);
+            }
+            list = newlist;
+        } else {
+            list = selectionSort(list, listOrder);
+        }
+        return list;
+    }
+
+    public static DoublyLinkedList shakerSort(DoublyLinkedList list, String listOrder) throws UnsupportedEncodingException {
+        // Use Selection Sort Algorithm to sort list in selected.
+        if ( listOrder.equals("desc") || listOrder.equals("asc") ) {
+
+            int i = 0;
+            int maxlength = list.node_count;
+            DoublyLinkedList newList = new DoublyLinkedList();
+
+            while (list.front != null && list.back != null) {
+                if(i % 10 == 0) {
+                    System.out.println("elements at indexes [" + i + "] and [" + (maxlength - i) + "] have been sorted.");
+                }
+
+                int max_Node = 0;
+                int min_Node = 0;
+
+                if (list.node_count != 1) {}
+                for (int j = 0; j <= list.node_count; j++) {
+                    String jTempdata = list.getNode(j).data;
+                    String maxTempdata = list.getNode(max_Node).data;
+                    String minTempdata = list.getNode(min_Node).data;
+                    boolean isHigher = false;
+                    boolean isLower = false;
+
+                    list.getNode(j).data = NaNCheck(list.getNode(j).data);
+                    list.getNode(max_Node).data = NaNCheck(list.getNode(max_Node).data);
+                    list.getNode(min_Node).data = NaNCheck(list.getNode(min_Node).data);
+
+                    if ( Integer.parseInt(list.getNode(j).data)
+                            > Integer.parseInt(list.getNode(max_Node).data) ) {
+                        isHigher = true;
+                    }
+
+                    if ( Integer.parseInt(list.getNode(j).data)
+                            < Integer.parseInt(list.getNode(min_Node).data) ) {
+                        isLower = true;
+                    }
+
+                    list.getNode(j).data = jTempdata;
+                    list.getNode(max_Node).data = maxTempdata;
+                    list.getNode(min_Node).data = minTempdata;
+
+                    if(isHigher) {
+                        max_Node = j;
+                    }
+
+                    if(isLower) {
+                        min_Node = j;
+                    }
+                }
+
+                String maxTempdata = list.getNode(max_Node).data;
+                String minTempdata = list.getNode(min_Node).data;
+                //System.out.println("removing minNode: " + minTempdata);
+                //System.out.println("removing maxNode: " + maxTempdata);
+
+                if( listOrder.equals("asc") ) {
+                    if(newList.front == null && newList.back == null) {
+                        newList.push_front(minTempdata);
+
+                        if( list.node_count != 1 ) {
+                            newList.push_back(maxTempdata);
+                        }
+                    } else {
+                        newList.insert(minTempdata, i);
+
+                        if( list.node_count != 1 ) {
+                            newList.insert(maxTempdata, newList.node_count - i);
+                        }
+                    }
+                } else if ( listOrder.equals("desc") ) {
+                    if(newList.front == null && newList.back == null) {
+                        newList.push_front(maxTempdata);
+
+                        if( list.node_count != 1 ) {
+                            newList.push_back(minTempdata);
+                        }
+                    } else {
+                        newList.insert(maxTempdata, i);
+
+                        if( list.node_count != 1 ) {
+                            newList.insert(minTempdata, newList.node_count - i);
+                        }
+                    }
+                }
+                //printList(newList, "");
+
+                i++;
+
+                list.deleteNode(minTempdata);
+                list.deleteNode(maxTempdata);
+            }
+
+            list = newList;
 
         } else if (listOrder.equals("reverse")) {
             // Reverse the order of the nodes sorted or otherwise.
@@ -329,10 +429,19 @@ public class Main {
 
             list = newlist;
         } else {
-            list = selectionSort(list, listOrder);
+            list = shakerSort(list, listOrder);
         }
 
         return list;
+    }
+
+    private static String NaNCheck(String value) {
+        try {
+            Integer.parseInt(value);
+            return value;
+        } catch (NumberFormatException ex) {
+            return ("" + Integer.MAX_VALUE);
+        }
     }
 
     public static void printList(DoublyLinkedList list, String order) {
@@ -353,8 +462,8 @@ public class Main {
         // create instance of Random class
         Random rand = new Random();
 
-        // Generate random integers in range 1 to 99
-        int rand_int = 1 + rand.nextInt(98);
+        // Generate random integers in range 1 to 999
+        int rand_int = 1 + rand.nextInt(998);
 
         return rand_int;
     }
