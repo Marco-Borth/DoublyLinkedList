@@ -38,8 +38,6 @@ public class Main {
                     input = br.readLine();
                 }
 
-
-
                 if (command.contains("front")) {
                     list.push_front(input);
                 } else if (command.contains("back")) {
@@ -153,13 +151,29 @@ public class Main {
                     listOrder = "reverse";
                 }
 
-                // Use Selection Sort Algorithm to sort list in selected.
-                if (listOrder.equals("desc")) {
-                    list = selectionSort(list, "desc");
-                } else if (listOrder.equals("reverse")) {
-                    list = selectionSort(list, "reverse");
+                if ( command.contains("selection")
+                        || command.contains("selectionsort")
+                        || command.contains("selection sort") ) {
+
+                    // Use Selection Sort Algorithm to sort list in selected.
+                    if (listOrder.equals("desc")) {
+                        list = selectionSort(list, "desc");
+                    } else if (listOrder.equals("reverse")) {
+                        list = selectionSort(list, "reverse");
+                    } else {
+                        list = selectionSort(list, "asc");
+                    }
                 } else {
-                    list = selectionSort(list, "asc");
+
+                    // Use Shaker Sort Algorithm to sort list in selected.
+                    if (listOrder.equals("desc")) {
+                        list = shakerSort(list, "desc");
+                    } else if (listOrder.equals("reverse")) {
+                        list = shakerSort(list, "reverse");
+                    } else {
+                        list = shakerSort(list, "asc");
+                    }
+
                 }
 
                 printList(list,"");
@@ -167,6 +181,7 @@ public class Main {
                 System.out.println("\nEnter how many nodes the new list will have:");
                 int newLength = Integer.parseInt(br.readLine());
 
+                list.clear();
                 for(int i = 0; i < newLength; i++) {
                     String input =  Integer.toString( generateRandomNumber() );
                     list.push_back(input);
@@ -233,14 +248,96 @@ public class Main {
 
     public static DoublyLinkedList selectionSort(DoublyLinkedList list, String listOrder) throws UnsupportedEncodingException {
         // Use Selection Sort Algorithm to sort list in selected.
+        if (listOrder.equals("desc")) {
+            for (int i  = list.node_count; i >= 0; i--) {
+                if(i % 10 == 0) {
+                    System.out.println("element at index [" + i + "] has being swapped.");
+                }
+                int min_Node = i;
+                for (int j = i; j >= 0; j--) {
+                    String jTempdata = list.getNode(j).data;
+                    String minTempdata = list.getNode(min_Node).data;
+                    boolean isLower = false;
+                    try {
+                        Integer.parseInt(list.getNode(j).data);
+                    } catch (NumberFormatException ex) {
+                        list.getNode(j).data = "" + Integer.MAX_VALUE;
+                    }
+                    try {
+                        Integer.parseInt(list.getNode(min_Node).data);
+                    } catch (NumberFormatException ex) {
+                        list.getNode(min_Node).data = "" + Integer.MAX_VALUE;
+                    }
+                    if ( Integer.parseInt(list.getNode(j).data)
+                            < Integer.parseInt(list.getNode(min_Node).data) ) {
+                        isLower = true;
+                    }
+                    list.getNode(j).data = jTempdata;
+                    list.getNode(min_Node).data = minTempdata;
+                    if(isLower) {
+                        min_Node = j;
+                    }
+                }
+                // swap max element with nth element in list.
+                list.swap(min_Node, i);
+            }
+        } else if (listOrder.equals("asc")) {
+            for (int i  = list.node_count; i >= 0; i--) {
+                if(i % 10 == 0) {
+                    System.out.println("element at index [" + i + "] is being swapped.");
+                }
+                int max_Node = i;
+                for (int j = i - 1; j >= 0; j--) {
+                    String jTempdata = list.getNode(j).data;
+                    String maxTempdata = list.getNode(max_Node).data;
+                    boolean isHigher = false;
+                    try {
+                        Integer.parseInt(list.getNode(j).data);
+                    } catch (NumberFormatException ex) {
+                        list.getNode(j).data = "" + Integer.MAX_VALUE;
+                    }
+                    try {
+                        Integer.parseInt(list.getNode(max_Node).data);
+                    } catch (NumberFormatException ex) {
+                        list.getNode(max_Node).data = "" + Integer.MAX_VALUE;
+                    }
+                    if ( Integer.parseInt(list.getNode(j).data)
+                            > Integer.parseInt(list.getNode(max_Node).data) ) {
+                        isHigher = true;
+                    }
+                    list.getNode(j).data = jTempdata;
+                    list.getNode(max_Node).data = maxTempdata;
+                    if(isHigher) {
+                        max_Node = j;
+                    }
+                }
+                // swap max element with nth element in list.
+                list.swap(max_Node, i);
+            }
+        } else if (listOrder.equals("reverse")) {
+            // Reverse the order of the nodes sorted or otherwise.
+            DoublyLinkedList newlist = new DoublyLinkedList();
+            for(int i = 0; i < list.node_count; i++) {
+                newlist.push_front(list.getNode(i).data);
+            }
+            list = newlist;
+        } else {
+            list = selectionSort(list, listOrder);
+        }
+        return list;
+    }
+
+    public static DoublyLinkedList shakerSort(DoublyLinkedList list, String listOrder) throws UnsupportedEncodingException {
+        // Use Selection Sort Algorithm to sort list in selected.
         if ( listOrder.equals("desc") || listOrder.equals("asc") ) {
 
             int i = 0;
+            int maxlength = list.node_count;
             DoublyLinkedList newList = new DoublyLinkedList();
 
             while (list.front != null && list.back != null) {
-                if(i % 100 == 0) {
-                    System.out.println("element at index [" + i + "] is being swapped.");
+                if(i % 10 == 0) {
+                    System.out.println("elements at indexes [" + i + "] and [" + (maxlength - i) + "] have been sorted.");
                 }
 
                 int max_Node = 0;
@@ -355,8 +452,8 @@ public class Main {
         // create instance of Random class
         Random rand = new Random();
 
-        // Generate random integers in range 1 to 99
-        int rand_int = 1 + rand.nextInt(98);
+        // Generate random integers in range 1 to 999
+        int rand_int = 1 + rand.nextInt(998);
 
         return rand_int;
     }
