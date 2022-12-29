@@ -253,31 +253,29 @@ public class Main {
                 if(i % 10 == 0) {
                     System.out.println("element at index [" + i + "] has being swapped.");
                 }
+
                 int min_Node = i;
                 for (int j = i; j >= 0; j--) {
                     String jTempdata = list.getNode(j).data;
                     String minTempdata = list.getNode(min_Node).data;
                     boolean isLower = false;
-                    try {
-                        Integer.parseInt(list.getNode(j).data);
-                    } catch (NumberFormatException ex) {
-                        list.getNode(j).data = "" + Integer.MAX_VALUE;
-                    }
-                    try {
-                        Integer.parseInt(list.getNode(min_Node).data);
-                    } catch (NumberFormatException ex) {
-                        list.getNode(min_Node).data = "" + Integer.MAX_VALUE;
-                    }
+
+                    list.getNode(j).data = NaNCheck(list.getNode(j).data);
+                    list.getNode(min_Node).data = NaNCheck(list.getNode(min_Node).data);
+
                     if ( Integer.parseInt(list.getNode(j).data)
                             < Integer.parseInt(list.getNode(min_Node).data) ) {
                         isLower = true;
                     }
+
                     list.getNode(j).data = jTempdata;
                     list.getNode(min_Node).data = minTempdata;
+
                     if(isLower) {
                         min_Node = j;
                     }
                 }
+
                 // swap max element with nth element in list.
                 list.swap(min_Node, i);
             }
@@ -286,37 +284,36 @@ public class Main {
                 if(i % 10 == 0) {
                     System.out.println("element at index [" + i + "] is being swapped.");
                 }
+
                 int max_Node = i;
                 for (int j = i - 1; j >= 0; j--) {
                     String jTempdata = list.getNode(j).data;
                     String maxTempdata = list.getNode(max_Node).data;
                     boolean isHigher = false;
-                    try {
-                        Integer.parseInt(list.getNode(j).data);
-                    } catch (NumberFormatException ex) {
-                        list.getNode(j).data = "" + Integer.MAX_VALUE;
-                    }
-                    try {
-                        Integer.parseInt(list.getNode(max_Node).data);
-                    } catch (NumberFormatException ex) {
-                        list.getNode(max_Node).data = "" + Integer.MAX_VALUE;
-                    }
+
+                    list.getNode(j).data = NaNCheck(list.getNode(j).data);
+                    list.getNode(max_Node).data = NaNCheck(list.getNode(max_Node).data);
+
                     if ( Integer.parseInt(list.getNode(j).data)
                             > Integer.parseInt(list.getNode(max_Node).data) ) {
                         isHigher = true;
                     }
+
                     list.getNode(j).data = jTempdata;
                     list.getNode(max_Node).data = maxTempdata;
+
                     if(isHigher) {
                         max_Node = j;
                     }
                 }
+
                 // swap max element with nth element in list.
                 list.swap(max_Node, i);
             }
         } else if (listOrder.equals("reverse")) {
             // Reverse the order of the nodes sorted or otherwise.
             DoublyLinkedList newlist = new DoublyLinkedList();
+
             for(int i = 0; i < list.node_count; i++) {
                 newlist.push_front(list.getNode(i).data);
             }
@@ -419,7 +416,7 @@ public class Main {
 
             list = newlist;
         } else {
-            list = selectionSort(list, listOrder);
+            list = shakerSort(list, listOrder);
         }
 
         return list;
