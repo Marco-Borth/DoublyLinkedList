@@ -340,6 +340,7 @@ public class Main {
                 int max_Node = 0;
                 int min_Node = 0;
 
+                if (list.node_count != 1) {}
                 for (int j = 0; j <= list.node_count; j++) {
                     String jTempdata = list.getNode(j).data;
                     String maxTempdata = list.getNode(max_Node).data;
@@ -382,18 +383,30 @@ public class Main {
                 if( listOrder.equals("asc") ) {
                     if(newList.front == null && newList.back == null) {
                         newList.push_front(minTempdata);
-                        newList.push_back(maxTempdata);
+
+                        if( list.node_count != 1 ) {
+                            newList.push_back(maxTempdata);
+                        }
                     } else {
                         newList.insert(minTempdata, i);
-                        newList.insert(maxTempdata, newList.node_count - i);
+
+                        if( list.node_count != 1 ) {
+                            newList.insert(maxTempdata, newList.node_count - i);
+                        }
                     }
                 } else if ( listOrder.equals("desc") ) {
                     if(newList.front == null && newList.back == null) {
                         newList.push_front(maxTempdata);
-                        newList.push_back(minTempdata);
+
+                        if( list.node_count != 1 ) {
+                            newList.push_back(minTempdata);
+                        }
                     } else {
                         newList.insert(maxTempdata, i);
-                        newList.insert(minTempdata, newList.node_count - i);
+
+                        if( list.node_count != 1 ) {
+                            newList.insert(minTempdata, newList.node_count - i);
+                        }
                     }
                 }
                 //printList(newList, "");
