@@ -74,7 +74,7 @@ public class Main {
                 } else if (command.contains("index")) {
                     System.out.println("\nEnter a valid index value?");
                     int index = Integer.parseInt(br.readLine());
-                    list.delete(index);
+                    list.deleteAtIndex(index);
                 } else if (command.contains("all")) {
                     list.clear();
                 }
@@ -159,7 +159,7 @@ public class Main {
                 } else if (listOrder.equals("reverse")) {
                     list = selectionSort(list, "reverse");
                 } else {
-                    list = selectionSort(list, "asc");
+                    list = doubleSelectionSort(list, "asc");
                 }
 
                 printList(list,"");
@@ -174,6 +174,8 @@ public class Main {
 
                 System.out.println("\nSUCCESS! A new Doubly Linked-List has been generated:\n");
                 printList(list,"");
+            } else {
+                System.out.println("\nERROR! Command not Valid!\n");
             }
         } while (!command.equals("q") || !command.equals("quit"));
     }
@@ -333,6 +335,207 @@ public class Main {
         }
 
         return list;
+    }
+
+    public static DoublyLinkedList doubleSelectionSort(DoublyLinkedList list, String listOrder) throws UnsupportedEncodingException {
+        // Use Selection Sort Algorithm to sort list in selected.
+        if (listOrder.equals("desc")) {
+
+            for (int i  = list.node_count; i >= 0; i--) {
+                if(i % 100 == 0) {
+                    System.out.println("element at index [" + i + "] has being swapped.");
+                }
+
+                int min_Node = i;
+                for (int j = i; j >= 0; j--) {
+                    String jTempdata = list.getNode(j).data;
+                    String minTempdata = list.getNode(min_Node).data;
+                    boolean isLower = false;
+
+                    try {
+                        Integer.parseInt(list.getNode(j).data);
+                    } catch (NumberFormatException ex) {
+                        list.getNode(j).data = "" + Integer.MAX_VALUE;
+                    }
+
+                    try {
+                        Integer.parseInt(list.getNode(min_Node).data);
+                    } catch (NumberFormatException ex) {
+                        list.getNode(min_Node).data = "" + Integer.MAX_VALUE;
+                    }
+
+                    if ( Integer.parseInt(list.getNode(j).data)
+                            < Integer.parseInt(list.getNode(min_Node).data) ) {
+                        isLower = true;
+                    }
+
+                    list.getNode(j).data = jTempdata;
+                    list.getNode(min_Node).data = minTempdata;
+
+                    if(isLower) {
+                        min_Node = j;
+                    }
+                }
+
+                // swap max element with nth element in list.
+                list.swap(min_Node, i);
+
+
+            }
+
+        } else if (listOrder.equals("asc")) {
+
+            int i = 0;
+            DoublyLinkedList newList = new DoublyLinkedList();
+
+            while (list.front != null && list.back != null) {
+                if(i % 100 == 0) {
+                    System.out.println("element at index [" + i + "] is being swapped.");
+                }
+
+                int max_Node = 0;
+                int min_Node = 0;
+                /*
+                for (int j = i+1; j <= list.node_count; j++) {
+                    String jTempdata = list.getNode(j).data;
+                    String minTempdata = list.getNode(min_Node).data;
+                    boolean isLower = false;
+
+                    try {
+                        Integer.parseInt(list.getNode(j).data);
+                    } catch (NumberFormatException ex) {
+                        list.getNode(j).data = "" + Integer.MAX_VALUE;
+                    }
+
+                    try {
+                        Integer.parseInt(list.getNode(min_Node).data);
+                    } catch (NumberFormatException ex) {
+                        list.getNode(min_Node).data = "" + Integer.MAX_VALUE;
+                    }
+
+                    if ( Integer.parseInt(list.getNode(j).data)
+                            < Integer.parseInt(list.getNode(min_Node).data) ) {
+                        isLower = true;
+                    }
+
+                    list.getNode(j).data = jTempdata;
+                    list.getNode(min_Node).data = minTempdata;
+
+                    if(isLower) {
+                        min_Node = j;
+                    }
+                }
+
+                for (int j = list.node_count; j >= i + 1; j--) {
+                    String jTempdata = list.getNode(j).data;
+                    String maxTempdata = list.getNode(max_Node).data;
+                    boolean isHigher = false;
+
+                    try {
+                        Integer.parseInt(list.getNode(j).data);
+                    } catch (NumberFormatException ex) {
+                        list.getNode(j).data = "" + Integer.MAX_VALUE;
+                    }
+
+                    try {
+                        Integer.parseInt(list.getNode(max_Node).data);
+                    } catch (NumberFormatException ex) {
+                        list.getNode(max_Node).data = "" + Integer.MAX_VALUE;
+                    }
+
+                    if ( Integer.parseInt(list.getNode(j).data)
+                            > Integer.parseInt(list.getNode(max_Node).data) ) {
+                        isHigher = true;
+                    }
+
+                    list.getNode(j).data = jTempdata;
+                    list.getNode(max_Node).data = maxTempdata;
+
+                    if(isHigher) {
+                        max_Node = j;
+                    }
+                }
+                */
+
+                for (int j = 0; j <= list.node_count; j++) {
+                    String jTempdata = list.getNode(j).data;
+                    String maxTempdata = list.getNode(max_Node).data;
+                    String minTempdata = list.getNode(min_Node).data;
+                    boolean isHigher = false;
+                    boolean isLower = false;
+
+                    list.getNode(j).data = NaNCheck(list.getNode(j).data);
+                    list.getNode(max_Node).data = NaNCheck(list.getNode(max_Node).data);
+                    list.getNode(min_Node).data = NaNCheck(list.getNode(min_Node).data);
+
+                    if ( Integer.parseInt(list.getNode(j).data)
+                            > Integer.parseInt(list.getNode(max_Node).data) ) {
+                        isHigher = true;
+                    }
+
+                    if ( Integer.parseInt(list.getNode(j).data)
+                            < Integer.parseInt(list.getNode(min_Node).data) ) {
+                        isLower = true;
+                    }
+
+                    list.getNode(j).data = jTempdata;
+                    list.getNode(max_Node).data = maxTempdata;
+                    list.getNode(min_Node).data = minTempdata;
+
+                    if(isHigher) {
+                        max_Node = j;
+                    }
+
+                    if(isLower) {
+                        min_Node = j;
+                    }
+                }
+
+                String maxTempdata = list.getNode(max_Node).data;
+                String minTempdata = list.getNode(min_Node).data;
+                System.out.println("removing minNode: " + minTempdata);
+                System.out.println("removing maxNode: " + maxTempdata);
+
+                if(newList.front == null && newList.back == null) {
+                    newList.push_front(minTempdata);
+                    newList.push_back(maxTempdata);
+                } else {
+                    newList.insert(minTempdata, i);
+                    newList.insert(maxTempdata, newList.node_count - i);
+                }
+                printList(newList, "");
+
+                i++;
+
+                list.deleteNode(minTempdata);
+                list.deleteNode(maxTempdata);
+            }
+
+            return newList;
+
+        } else if (listOrder.equals("reverse")) {
+            // Reverse the order of the nodes sorted or otherwise.
+            DoublyLinkedList newlist = new DoublyLinkedList();
+
+            for(int i = 0; i < list.node_count; i++) {
+                newlist.push_front(list.getNode(i).data);
+            }
+
+            list = newlist;
+        } else {
+            list = selectionSort(list, listOrder);
+        }
+
+        return list;
+    }
+
+    private static String NaNCheck(String value) {
+        try {
+            Integer.parseInt(value);
+            return value;
+        } catch (NumberFormatException ex) {
+            return ("" + Integer.MAX_VALUE);
+        }
     }
 
     public static void printList(DoublyLinkedList list, String order) {

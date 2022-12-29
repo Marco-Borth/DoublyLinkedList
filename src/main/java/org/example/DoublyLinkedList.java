@@ -1,7 +1,5 @@
 package org.example;
 
-import java.util.Random;
-
 public class DoublyLinkedList {
     DoublyLinkedList.Node front; // front of list
     DoublyLinkedList.Node back; // front of list
@@ -147,14 +145,29 @@ public class DoublyLinkedList {
             } else if (index == node_count) {
                 return back;
             } else {
-                DoublyLinkedList.Node element = front;
+                DoublyLinkedList.Node element;
+                int i;
 
-                int i = 0;
-                while ( i < index) {
-                    if(element != null) {
-                        element = element.next;
+                if ( index < node_count/2 ) {
+                    element = front;
+                    i = 0;
+
+                    while ( i < index) {
+                        if(element != null) {
+                            element = element.next;
+                        }
+                        i++;
                     }
-                    i++;
+                } else {
+                    element = back;
+                    i = node_count;
+
+                    while ( i > index) {
+                        if(element != null) {
+                            element = element.prev;
+                        }
+                        i--;
+                    }
                 }
 
                 return element;
@@ -207,7 +220,7 @@ public class DoublyLinkedList {
         }
     }
 
-    public void delete(int index) {
+    public void deleteAtIndex(int index) {
         if(front != null && back != null) {
             if(front == back) {
                 delete_last();
@@ -246,6 +259,36 @@ public class DoublyLinkedList {
                         element = element.next;
                     }
                     i++;
+                }
+
+                //  insert and link the new node
+                // to the list.
+                DoublyLinkedList.Node nextElement = element.next;
+                DoublyLinkedList.Node prevElement = element.prev;
+
+                prevElement.next = nextElement;
+                nextElement.prev = prevElement;
+
+                node_count--;
+            }
+        }
+    }
+
+    public void deleteNode(String value) {
+        if(front != null && back != null) {
+            if(front == back) {
+                delete_last();
+            } else if (value == front.data) {
+                delete_front();
+            } else if (value == back.data) {
+                delete_back();
+            } else {
+                DoublyLinkedList.Node element = front;
+
+                while ( element.data != value) {
+                    if(element != null) {
+                        element = element.next;
+                    }
                 }
 
                 //  insert and link the new node
