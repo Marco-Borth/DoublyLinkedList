@@ -172,14 +172,18 @@ public class Main {
                         list = shakerSort(list, "asc");
                     }
                 } else if ( command.contains("quick")
-                        || command.contains("quicksort")
-                        || command.contains("quick sort") ) {
+                        || command.contains("quicksort") ) {
+                    boolean useMedian = false;
+
+                    if( command.contains("median") ) {
+                        useMedian = true;
+                    }
 
                     // Use Quick Sort Algorithm to sort list in selected order.
                     if (listOrder.equals("desc")) {
-                        list = quickSort(list, "desc", 0, list.node_count);
+                        list = quickSort(list, "desc", 0, list.node_count, useMedian);
                     } else {
-                        list = quickSort(list, "asc", 0, list.node_count);
+                        list = quickSort(list, "asc", 0, list.node_count, useMedian);
                     }
                 } else {
 
@@ -237,15 +241,15 @@ public class Main {
     public static void printCommands() {
         System.out.println("\nWhat would you like to do?");
 
-        System.out.println("1. Insert a random Node to the list.");
-        System.out.println("2. Delete a Node from the list.");
-        System.out.println("3. Print all the Nodes in the list.");
-        System.out.println("4. Save list data to a file.");
-        System.out.println("5. Write list data from a file.");
-        System.out.println("6. Sort list data.");
-        System.out.println("7. Reverse order of list data.");
-        System.out.println("8. Check if list is sorted");
-        System.out.println("9. Generate a new Random list.");
+        System.out.print("1. Insert random Node to the list.");
+        System.out.print("\t\t2. Delete target Node from the list.");
+        System.out.print("\t\t3. Print all Nodes in the list.\n");
+        System.out.print("4. Save list data to a file.");
+        System.out.print("\t\t\t5. Write list data from a file.");
+        System.out.print("\t\t\t\t6. Sort list data.\n");
+        System.out.print("7. Reverse order of list data.");
+        System.out.print("\t\t\t8. Check if list is sorted");
+        System.out.print("\t\t\t\t\t9. Generate a new Random list.\n");
         System.out.println("Q. Press Q to quit.");
     }
 
@@ -287,8 +291,14 @@ public class Main {
         return list;
     }
 
-    public static int partition(DoublyLinkedList list, int front, int back) throws UnsupportedEncodingException {
+    public static int partition(DoublyLinkedList list, String listOrder, int front, int back, boolean useMedian) throws UnsupportedEncodingException {
         String pivot = NaNCheck(list.getNode(back).data);
+
+        if(useMedian) {
+            int middle = (front + back)/2;
+
+            pivot = NaNCheck(list.getNode(middle).data);
+        }
 
         int i = (front - 1);
 
@@ -298,7 +308,7 @@ public class Main {
         }
         */
 
-        for (int j = front; j <= back - 1; j++) {
+        for (int j = front; j < back; j++) {
             String jTempdata = list.getNode(j).data;
             boolean isLower = false;
 
@@ -319,27 +329,26 @@ public class Main {
         list.swap(i + 1, back);
         return (i + 1);
     }
-
-    public static DoublyLinkedList quickSort(DoublyLinkedList list, String listOrder, int front, int back) throws UnsupportedEncodingException {
+    public static DoublyLinkedList quickSort(DoublyLinkedList list, String listOrder, int front, int back, boolean useMedian) throws UnsupportedEncodingException {
         if (listOrder.equals("desc")) {
 
-            list = quickSort(list, "asc", front, back);
+            list = quickSort(list, "asc", front, back, useMedian);
             list = flipListOrder(list);
 
         } else if (listOrder.equals("asc")) {
             if (front < back) {
 
-                if(front % 100 == 0 || back % 100 == 0 ) {
+                if(front % 10 == 0 || back % 10 == 0 ) {
                     System.out.println("elements from indexes [" + front + "] to [" + back + "] are being partitioned.");
                 }
 
-                int pi = partition(list, front, back);
+                int pi = partition(list, listOrder, front, back, useMedian);
 
-                list = quickSort(list, listOrder, front, pi - 1);
-                list = quickSort(list, listOrder, pi + 1, back);
+                list = quickSort(list, listOrder, front, pi - 1, useMedian);
+                list = quickSort(list, listOrder, pi + 1, back, useMedian);
             }
         } else {
-            list = quickSort(list, "asc", front, back);
+            list = quickSort(list, "asc", front, back, useMedian);
         }
         return list;
     }
