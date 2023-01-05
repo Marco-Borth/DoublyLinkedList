@@ -313,12 +313,13 @@ public class DoublyLinkedList {
     {
         DoublyLinkedList.Node currNode = front;
         int length = 0;
+        double radix = Math.round( Math.sqrt(Double.valueOf(node_count)) );
 
         String output = "\nFront ==>";
 
         // Traverse through the DoublyLinkedList
         while (currNode != null) {
-            if(length % 10 == 0) {
+            if(length % radix == 0) {
                 output += "\n";
             }
 
@@ -339,12 +340,13 @@ public class DoublyLinkedList {
     public String printB2F() {
         DoublyLinkedList.Node currNode = back;
         int length = 0;
+        double radix = Math.round( Math.sqrt(Double.valueOf(node_count)) );
 
         String output = "\nBack ==>";
 
         // Traverse through the DoublyLinkedList
         while (currNode != null) {
-            if(length % 10 == 0) {
+            if(length % radix == 0) {
                 output += "\n";
             }
 

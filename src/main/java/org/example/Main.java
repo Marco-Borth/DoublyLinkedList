@@ -155,26 +155,52 @@ public class Main {
                         || command.contains("selectionsort")
                         || command.contains("selection sort") ) {
 
-                    // Use Selection Sort Algorithm to sort list in selected.
+                    // Use Selection Sort Algorithm to sort list  in selected order.
                     if (listOrder.equals("desc")) {
                         list = selectionSort(list, "desc");
-                    } else if (listOrder.equals("reverse")) {
-                        list = selectionSort(list, "reverse");
                     } else {
                         list = selectionSort(list, "asc");
                     }
-                } else {
+                } else if ( command.contains("shaker")
+                        || command.contains("shakersort")
+                        || command.contains("shaker sort") ) {
 
-                    // Use Shaker Sort Algorithm to sort list in selected.
+                    // Use Shaker Sort Algorithm to sort list  in selected order.
                     if (listOrder.equals("desc")) {
                         list = shakerSort(list, "desc");
-                    } else if (listOrder.equals("reverse")) {
-                        list = shakerSort(list, "reverse");
+                    } else {
+                        list = shakerSort(list, "asc");
+                    }
+                } else if ( command.contains("quick")
+                        || command.contains("quicksort")
+                        || command.contains("quick sort") ) {
+
+                    // Use Quick Sort Algorithm to sort list in selected order.
+                    if (listOrder.equals("desc")) {
+
+                    } else {
+                        list = quickSort(list, "asc", 0, list.node_count);
+                    }
+                } else {
+
+                    // Use Shaker Sort Algorithm BY DEFAULT to sort list in selected order.
+                    if (listOrder.equals("desc")) {
+                        list = shakerSort(list, "desc");
                     } else {
                         list = shakerSort(list, "asc");
                     }
 
                 }
+
+                // flip order of list if reverse key is entered.
+                if (listOrder.equals("reverse")) {
+                    list = flipListOrder(list);
+                }
+
+                printList(list,"");
+            } else if (command.contains("reverse") || command.contains("flip")) {
+                // flip order of list if reverse key is entered.
+                list = flipListOrder(list);
 
                 printList(list,"");
             } else if (command.contains("reset") || command.contains("generate") || command.contains("new list")) {
@@ -204,7 +230,8 @@ public class Main {
         System.out.println("4. Save list data to a file.");
         System.out.println("5. Write list data from a file.");
         System.out.println("6. Sort list data.");
-        System.out.println("7. Generate a new Random list.");
+        System.out.println("7. Reverse order of list data.");
+        System.out.println("8. Generate a new Random list.");
         System.out.println("Q. Press Q to quit.");
     }
 
@@ -243,6 +270,56 @@ public class Main {
         }
 
         System.out.println("\nFile data has been saved.\n");
+        return list;
+    }
+
+    public static int partition(DoublyLinkedList list, String listOrder, int low, int high) throws UnsupportedEncodingException {
+        if (listOrder.equals("desc")) {
+
+        } else if (listOrder.equals("asc")) {
+            String pivot = NaNCheck(list.getNode(high).data);
+
+            int i = (low - 1);
+
+            for (int j = low; j <= high - 1; j++) {
+                String jTempdata = list.getNode(j).data;
+                boolean isLower = false;
+
+                list.getNode(j).data = NaNCheck(list.getNode(j).data);
+
+                if ( Integer.parseInt(list.getNode(j).data)  <  Integer.parseInt(pivot) ) {
+                    isLower = true;
+                }
+
+                list.getNode(j).data = jTempdata;
+
+                if(isLower) {
+                    i++;
+                    list.swap(i,j);
+                }
+            }
+
+            list.swap(i + 1, high);
+            return (i + 1);
+        }
+
+        return low;
+    }
+
+    public static DoublyLinkedList quickSort(DoublyLinkedList list, String listOrder, int low, int high) throws UnsupportedEncodingException {
+        if (listOrder.equals("desc")) {
+
+        } else if (listOrder.equals("asc")) {
+            if (low < high) {
+
+                int pi = partition(list, listOrder, low, high);
+
+                list = quickSort(list, listOrder, low, pi - 1);
+                list = quickSort(list, listOrder, pi + 1, high);
+            }
+        } else {
+            list = quickSort(list, "asc", low, high);
+        }
         return list;
     }
 
@@ -310,22 +387,14 @@ public class Main {
                 // swap max element with nth element in list.
                 list.swap(max_Node, i);
             }
-        } else if (listOrder.equals("reverse")) {
-            // Reverse the order of the nodes sorted or otherwise.
-            DoublyLinkedList newlist = new DoublyLinkedList();
-
-            for(int i = 0; i < list.node_count; i++) {
-                newlist.push_front(list.getNode(i).data);
-            }
-            list = newlist;
         } else {
-            list = selectionSort(list, listOrder);
+            list = selectionSort(list, "asc");
         }
         return list;
     }
 
     public static DoublyLinkedList shakerSort(DoublyLinkedList list, String listOrder) throws UnsupportedEncodingException {
-        // Use Selection Sort Algorithm to sort list in selected.
+        // Use Shaker Sort Algorithm to sort list in selected.
         if ( listOrder.equals("desc") || listOrder.equals("asc") ) {
 
             int i = 0;
@@ -419,18 +488,21 @@ public class Main {
 
             list = newList;
 
-        } else if (listOrder.equals("reverse")) {
-            // Reverse the order of the nodes sorted or otherwise.
-            DoublyLinkedList newlist = new DoublyLinkedList();
-
-            for(int i = 0; i < list.node_count; i++) {
-                newlist.push_front(list.getNode(i).data);
-            }
-
-            list = newlist;
         } else {
-            list = shakerSort(list, listOrder);
+            list = shakerSort(list, "asc");
         }
+
+        return list;
+    }
+
+    public static DoublyLinkedList flipListOrder(DoublyLinkedList list) {
+        DoublyLinkedList newlist = new DoublyLinkedList();
+
+        for(int i = 0; i < list.node_count; i++) {
+            newlist.push_front(list.getNode(i).data);
+        }
+
+        list = newlist;
 
         return list;
     }
