@@ -177,7 +177,7 @@ public class Main {
 
                     // Use Quick Sort Algorithm to sort list in selected order.
                     if (listOrder.equals("desc")) {
-
+                        list = quickSort(list, "desc", 0, list.node_count);
                     } else {
                         list = quickSort(list, "asc", 0, list.node_count);
                     }
@@ -203,6 +203,19 @@ public class Main {
                 list = flipListOrder(list);
 
                 printList(list,"");
+            } else if (command.contains("test")
+                    || command.contains("test list")
+                    || command.contains("testlist")
+                    || command.contains("check list")
+                    || command.contains("checklist") ) {
+
+                if ( isListSorted(list, "asc") ) {
+                    System.out.println("\nList is sorted in [ASC] order.");
+                } else if ( isListSorted(list, "desc") ) {
+                    System.out.println("\nList is sorted in [DESC] order.");
+                } else {
+                    System.out.println("\nList is NOT sorted in any order.");
+                }
             } else if (command.contains("reset") || command.contains("generate") || command.contains("new list")) {
                 System.out.println("\nEnter how many nodes the new list will have:");
                 int newLength = Integer.parseInt(br.readLine());
@@ -231,7 +244,8 @@ public class Main {
         System.out.println("5. Write list data from a file.");
         System.out.println("6. Sort list data.");
         System.out.println("7. Reverse order of list data.");
-        System.out.println("8. Generate a new Random list.");
+        System.out.println("8. Check if list is sorted");
+        System.out.println("9. Generate a new Random list.");
         System.out.println("Q. Press Q to quit.");
     }
 
@@ -273,52 +287,59 @@ public class Main {
         return list;
     }
 
-    public static int partition(DoublyLinkedList list, String listOrder, int low, int high) throws UnsupportedEncodingException {
-        if (listOrder.equals("desc")) {
+    public static int partition(DoublyLinkedList list, int front, int back) throws UnsupportedEncodingException {
+        String pivot = NaNCheck(list.getNode(back).data);
 
-        } else if (listOrder.equals("asc")) {
-            String pivot = NaNCheck(list.getNode(high).data);
+        int i = (front - 1);
 
-            int i = (low - 1);
+        /*
+        if(i % 10 == 0) {
+            System.out.println("element at index [" + i + "] is being swapped.");
+        }
+        */
 
-            for (int j = low; j <= high - 1; j++) {
-                String jTempdata = list.getNode(j).data;
-                boolean isLower = false;
+        for (int j = front; j <= back - 1; j++) {
+            String jTempdata = list.getNode(j).data;
+            boolean isLower = false;
 
-                list.getNode(j).data = NaNCheck(list.getNode(j).data);
+            list.getNode(j).data = NaNCheck(list.getNode(j).data);
 
-                if ( Integer.parseInt(list.getNode(j).data)  <  Integer.parseInt(pivot) ) {
-                    isLower = true;
-                }
-
-                list.getNode(j).data = jTempdata;
-
-                if(isLower) {
-                    i++;
-                    list.swap(i,j);
-                }
+            if ( Integer.parseInt(list.getNode(j).data)  <  Integer.parseInt(pivot) ) {
+                isLower = true;
             }
 
-            list.swap(i + 1, high);
-            return (i + 1);
+            list.getNode(j).data = jTempdata;
+
+            if(isLower) {
+                i++;
+                list.swap(i,j);
+            }
         }
 
-        return low;
+        list.swap(i + 1, back);
+        return (i + 1);
     }
 
-    public static DoublyLinkedList quickSort(DoublyLinkedList list, String listOrder, int low, int high) throws UnsupportedEncodingException {
+    public static DoublyLinkedList quickSort(DoublyLinkedList list, String listOrder, int front, int back) throws UnsupportedEncodingException {
         if (listOrder.equals("desc")) {
 
+            list = quickSort(list, "asc", front, back);
+            list = flipListOrder(list);
+
         } else if (listOrder.equals("asc")) {
-            if (low < high) {
+            if (front < back) {
 
-                int pi = partition(list, listOrder, low, high);
+                if(front % 100 == 0 || back % 100 == 0 ) {
+                    System.out.println("elements from indexes [" + front + "] to [" + back + "] are being partitioned.");
+                }
 
-                list = quickSort(list, listOrder, low, pi - 1);
-                list = quickSort(list, listOrder, pi + 1, high);
+                int pi = partition(list, front, back);
+
+                list = quickSort(list, listOrder, front, pi - 1);
+                list = quickSort(list, listOrder, pi + 1, back);
             }
         } else {
-            list = quickSort(list, "asc", low, high);
+            list = quickSort(list, "asc", front, back);
         }
         return list;
     }
@@ -328,7 +349,7 @@ public class Main {
         if (listOrder.equals("desc")) {
             for (int i  = list.node_count; i >= 0; i--) {
                 if(i % 10 == 0) {
-                    System.out.println("element at index [" + i + "] has being swapped.");
+                    System.out.println("element at index [" + i + "] is being swapped.");
                 }
 
                 int min_Node = i;
@@ -493,6 +514,42 @@ public class Main {
         }
 
         return list;
+    }
+
+    public static boolean isListSorted(DoublyLinkedList list, String listOrder) {
+
+        if (list.front == null && list.back == null) {
+            return false;
+        } else if (list.node_count == 1) {
+            return true;
+        } else if ( listOrder.equals("asc") || listOrder.equals("desc") ) {
+            for (int j = 1; j < list.node_count; j++) {
+                String iTempdata = list.getNode(j - 1).data;
+                String jTempdata = list.getNode(j).data;
+
+                list.getNode(j - 1).data = NaNCheck(list.getNode(j - 1).data);
+                list.getNode(j).data = NaNCheck(list.getNode(j).data);
+
+                if( listOrder.equals("asc") && Integer.parseInt(list.getNode(j).data) < Integer.parseInt(list.getNode(j - 1).data) ) {
+                    list.getNode(j - 1).data = iTempdata;
+                    list.getNode(j).data = jTempdata;
+
+                    return false;
+                } else if ( listOrder.equals("desc") && Integer.parseInt(list.getNode(j).data) > Integer.parseInt(list.getNode(j - 1).data) ) {
+                    list.getNode(j - 1).data = iTempdata;
+                    list.getNode(j).data = jTempdata;
+
+                    return false;
+                }
+
+                list.getNode(j - 1).data = iTempdata;
+                list.getNode(j).data = jTempdata;
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
     public static DoublyLinkedList flipListOrder(DoublyLinkedList list) {
