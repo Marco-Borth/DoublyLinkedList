@@ -13,7 +13,7 @@ public class Main {
         System.out.println("\nWelcome to the Linked-List Terminal Program.");
         System.out.println("Here is a Doubly Linked-List Generate for your to start with.\n");
 
-        for(int i = 0; i < 10; i++) {
+        for(int i = 0; i < 25; i++) {
             String input =  Integer.toString( generateRandomNumber() );
             list.push_back(input);
         }
@@ -28,7 +28,8 @@ public class Main {
             command = br.readLine();
             System.out.println("You have entered: " + command);
 
-            if (command.contains("insert") || command.contains("push") ) {
+            if ( ( command.contains("insert") && !command.contains("insertion") )
+                    || command.contains("push") ) {
                 String input;
 
                 if (command.contains("random")) {
@@ -142,76 +143,16 @@ public class Main {
                 list = loadListFromFile(list, fileName);
                 printList(list,"");
             } else if (command.contains("sort")) {
-                String listOrder = "asc";
-                if ( command.contains("asc") || command.contains("ascending") ) {
-                    listOrder = "asc";
-                } else if ( command.contains("desc") || command.contains("descending") ) {
-                    listOrder = "desc";
-                } else if ( command.contains("reverse") ) {
-                    listOrder = "reverse";
-                }
 
-                if ( command.contains("selection")
-                        || command.contains("selectionsort")
-                        || command.contains("selection sort") ) {
-
-                    // Use Selection Sort Algorithm to sort list  in selected order.
-                    if (listOrder.equals("desc")) {
-                        list = selectionSort(list, "desc");
-                    } else {
-                        list = selectionSort(list, "asc");
-                    }
-                } else if ( command.contains("shaker")
-                        || command.contains("shakersort")
-                        || command.contains("shaker sort") ) {
-
-                    // Use Shaker Sort Algorithm to sort list  in selected order.
-                    if (listOrder.equals("desc")) {
-                        list = shakerSort(list, "desc");
-                    } else {
-                        list = shakerSort(list, "asc");
-                    }
-                } else if ( command.contains("quick")
-                        || command.contains("quicksort") ) {
-                    boolean useMedian = false;
-
-                    if( command.contains("median") ) {
-                        useMedian = true;
-                    }
-
-                    // Use Quick Sort Algorithm to sort list in selected order.
-                    if (listOrder.equals("desc")) {
-                        list = quickSort(list, "desc", 0, list.node_count, useMedian);
-                    } else {
-                        list = quickSort(list, "asc", 0, list.node_count, useMedian);
-                    }
-                } else {
-
-                    // Use Shaker Sort Algorithm BY DEFAULT to sort list in selected order.
-                    if (listOrder.equals("desc")) {
-                        list = shakerSort(list, "desc");
-                    } else {
-                        list = shakerSort(list, "asc");
-                    }
-
-                }
-
-                // flip order of list if reverse key is entered.
-                if (listOrder.equals("reverse")) {
-                    list = flipListOrder(list);
-                }
-
+                list = sortList(list, command);
                 printList(list,"");
+
             } else if (command.contains("reverse") || command.contains("flip")) {
                 // flip order of list if reverse key is entered.
                 list = flipListOrder(list);
 
                 printList(list,"");
-            } else if (command.contains("test")
-                    || command.contains("test list")
-                    || command.contains("testlist")
-                    || command.contains("check list")
-                    || command.contains("checklist") ) {
+            } else if (command.contains("test") || command.contains("test list") || command.contains("testlist") ) {
 
                 if ( isListSorted(list, "asc") ) {
                     System.out.println("\nList is sorted in [ASC] order.");
@@ -236,6 +177,84 @@ public class Main {
                 System.out.println("\nERROR! Command not Valid!\n");
             }
         } while (!command.equals("q") || !command.equals("quit"));
+    }
+
+    private static DoublyLinkedList sortList(DoublyLinkedList list, String command) throws UnsupportedEncodingException {
+        String listOrder = "asc";
+        if ( command.contains("asc") || command.contains("ascending") ) {
+            listOrder = "asc";
+        } else if ( command.contains("desc") || command.contains("descending") ) {
+            listOrder = "desc";
+        } else if ( command.contains("reverse") ) {
+            listOrder = "reverse";
+        }
+
+        if ( command.contains("insertion") || command.contains("insertionsort") ) {
+
+            // Use Insertion Sort Algorithm to sort list  in selected order.
+            if (listOrder.equals("desc")) {
+                list = insertionSort(list, "desc");
+            } else {
+                list = insertionSort(list, "asc");
+            }
+        } else if ( command.contains("selection") || command.contains("selectionsort") ) {
+
+            // Use Selection Sort Algorithm to sort list  in selected order.
+            if (listOrder.equals("desc")) {
+                list = selectionSort(list, "desc");
+            } else {
+                list = selectionSort(list, "asc");
+            }
+        } else if ( command.contains("shaker") || command.contains("shakersort")) {
+
+            // Use Shaker Sort Algorithm to sort list  in selected order.
+            if (listOrder.equals("desc")) {
+                list = shakerSort(list, "desc");
+            } else {
+                list = shakerSort(list, "asc");
+            }
+        } else if ( command.contains("quick") || command.contains("quicksort") ) {
+            boolean useMedian = false;
+
+            if( command.contains("median") ) {
+                useMedian = true;
+            }
+
+            // Use Quick Sort Algorithm to sort list in selected order.
+            if (listOrder.equals("desc")) {
+                list = quickSort(list, "desc", 0, list.node_count, useMedian);
+                list = insertionSort(list, "desc");
+            } else {
+                list = quickSort(list, "asc", 0, list.node_count, useMedian);
+                list = insertionSort(list, "asc");
+            }
+        } else if ( command.contains("merge") || command.contains("mergesort") ) {
+
+            // Use Quick Sort Algorithm to sort list in selected order.
+            if (listOrder.equals("desc")) {
+                list = mergeSort(list, "desc", 0, list.node_count);
+            } else {
+                list = mergeSort(list, "asc", 0, list.node_count);
+            }
+        } else if ( command.contains("reverse") ) {
+            list = flipListOrder(list);
+        } else {
+
+            // Use Quick Sort Algorithm BY DEFAULT.
+            list = sortList(list, "quick sort");
+            if (listOrder.equals("desc")) {
+                list = sortList(list, "quick sort desc");
+            } else {
+                list = sortList(list, "quick sort");
+            }
+        }
+
+        // flip order of list if reverse key is entered.
+        if (listOrder.equals("reverse")) {
+            list = flipListOrder(list);
+        }
+
+        return list;
     }
 
     public static void printCommands() {
@@ -288,6 +307,90 @@ public class Main {
         }
 
         System.out.println("\nFile data has been saved.\n");
+        return list;
+    }
+
+    public static DoublyLinkedList merge(DoublyLinkedList list, int left, int middle, int right) throws UnsupportedEncodingException {
+
+        int leftLength = middle - left + 1;
+        int rightLength = right - middle;
+
+        DoublyLinkedList leftSideList = new DoublyLinkedList();
+        DoublyLinkedList rightSideList = new DoublyLinkedList();
+
+        for (int i = 0; i < leftLength; ++i) {
+            leftSideList.push_back(list.getNode(left+ i).data);
+        }
+
+        for (int j = 0; j < rightLength; ++j) {
+            rightSideList.push_back(list.getNode(middle + 1 + j).data);
+        }
+
+        int i = 0;
+        int j = 0;
+
+        int k = left;
+        while(i < leftLength && j < rightLength) {
+
+            String iTempdata = leftSideList.getNode(i).data;
+            String jTempdata = rightSideList.getNode(j).data;
+            boolean isLower = false;
+
+            leftSideList.getNode(i).data = NaNCheck(leftSideList.getNode(i).data);
+            rightSideList.getNode(j).data = NaNCheck(rightSideList.getNode(j).data);
+
+            if( Integer.parseInt(leftSideList.getNode(i).data) <= Integer.parseInt(rightSideList.getNode(j).data) ) {
+                isLower = true;
+            }
+
+            leftSideList.getNode(i).data = iTempdata;
+            rightSideList.getNode(j).data = jTempdata;
+
+            if(isLower) {
+                list.getNode(k).data = leftSideList.getNode(i).data;
+                i++;
+            } else {
+                list.getNode(k).data = rightSideList.getNode(j).data;
+                j++;
+            }
+            k++;
+        }
+
+        while (i < leftLength) {
+            list.getNode(k).data = leftSideList.getNode(i).data;
+            i++;
+            k++;
+        }
+
+        while (j < rightLength) {
+            list.getNode(k).data = rightSideList.getNode(j).data;
+            j++;
+            k++;
+        }
+
+        return list;
+    }
+    public static DoublyLinkedList mergeSort(DoublyLinkedList list, String listOrder, int left, int right) throws UnsupportedEncodingException {
+
+        if (listOrder.equals("desc")) {
+
+            list = mergeSort(list, "asc", left, right);
+            list = flipListOrder(list);
+
+        } else if (listOrder.equals("asc")) {
+
+            if(left < right) {
+                int middle = left + ( right - 1 ) / 2;
+
+                mergeSort(list, listOrder, left, middle);
+                mergeSort(list, listOrder, middle + 1, right);
+
+                merge(list, left, middle, right);
+            }
+
+        } else {
+            list = mergeSort(list, "asc", left, right);
+        }
         return list;
     }
 
@@ -349,6 +452,51 @@ public class Main {
             }
         } else {
             list = quickSort(list, "asc", front, back, useMedian);
+        }
+        return list;
+    }
+
+    public static DoublyLinkedList insertionSort(DoublyLinkedList list, String listOrder) {
+
+        if (listOrder.equals("desc")) {
+
+            list = insertionSort(list, "asc");
+            list = flipListOrder(list);
+
+        } else if (listOrder.equals("asc")) {
+            int nanCount = 0;
+
+            for (int i = 0; i <= list.node_count - nanCount; i++) {
+                if( !isNumeric(list.getNode(i).data) ) {
+                    list.swap(i, list.node_count - nanCount);
+                    nanCount++;
+                }
+            }
+
+            printList(list,"");
+
+            for (int i = 1; i <= list.node_count - nanCount; i++) {
+                if(i % 10 == 0) {
+                    System.out.println("element at index [" + i + "] is being swapped.");
+                }
+
+                String key =  list.getNode(i).data;
+                int j = i - 1;
+
+                String keyTempdata = key;
+
+                key = NaNCheck(list.getNode(i).data);
+
+                while ( j >= 0 && Integer.parseInt(list.getNode(j).data) > Integer.parseInt(key) ) {
+                    list.getNode(j + 1).data = list.getNode(j).data;
+                    j = j - 1;
+                }
+                key = keyTempdata;
+                list.getNode(j + 1).data = key;
+            }
+
+        } else {
+            list = insertionSort(list, "asc");
         }
         return list;
     }
@@ -562,13 +710,10 @@ public class Main {
     }
 
     public static DoublyLinkedList flipListOrder(DoublyLinkedList list) {
-        DoublyLinkedList newlist = new DoublyLinkedList();
 
-        for(int i = 0; i < list.node_count; i++) {
-            newlist.push_front(list.getNode(i).data);
+        for(int i = 0; i < list.node_count/2; i++) {
+            list.swap(i, list.node_count - i);
         }
-
-        list = newlist;
 
         return list;
     }
@@ -604,5 +749,18 @@ public class Main {
         int rand_int = 1 + rand.nextInt(998);
 
         return rand_int;
+    }
+
+    private static boolean isNumeric(String inputString) {
+        if (inputString == null || inputString.length() == 0) {
+            return false;
+        } else {
+            for (char c : inputString.toCharArray()) {
+                if (!Character.isDigit(c)) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }
