@@ -6,7 +6,7 @@ public class DoublyLinkedList {
     int node_count = 0;
 
     // Doubly Linked list Node.
-    class Node {
+    static class Node {
 
         String data;
         DoublyLinkedList.Node next;
@@ -24,21 +24,20 @@ public class DoublyLinkedList {
     // Method to insert a new node
     public void push_back(String data) {
         // Create a new node with given data
-        DoublyLinkedList.Node new_node = new DoublyLinkedList.Node(data);
+        DoublyLinkedList.Node new_node = new Node(data);
 
         // If the Linked List is empty,
         // then make the new node as front and back
         if (front == null) {
             front = new_node;
-            back = new_node;
         } else {
 
             // Else insert and link the new node
             // to the list back.
             new_node.prev = back;
             back.next = new_node;
-            back = new_node;
         }
+        back = new_node;
 
         // increment node count.
         node_count++;
@@ -46,7 +45,7 @@ public class DoublyLinkedList {
 
     public void push_front(String data) {
         // Create a new node with given data
-        DoublyLinkedList.Node new_node = new DoublyLinkedList.Node(data);
+        DoublyLinkedList.Node new_node = new Node(data);
 
         // If the Linked List is empty,
         // then make the new node as front and back
@@ -78,7 +77,7 @@ public class DoublyLinkedList {
                 push_back(data);
             } else {
                 // Create a new node with given data
-                DoublyLinkedList.Node new_node = new DoublyLinkedList.Node(data);
+                DoublyLinkedList.Node new_node = new Node(data);
 
                 if (index == 1) {
                     DoublyLinkedList.Node second2front = front;
@@ -96,8 +95,8 @@ public class DoublyLinkedList {
                     new_node.next = back;
                     back.prev = new_node;
                     second2back.next = new_node;
-                } else  if(true) {
-                    DoublyLinkedList.Node element = front;
+                } else {
+                    Node element = front;
 
                     int i = 1;
                     while ( i < index) {
@@ -109,7 +108,8 @@ public class DoublyLinkedList {
 
                     //  insert and link the new node
                     // to the list.
-                    DoublyLinkedList.Node nextElement = element.next;
+                    assert element != null;
+                    Node nextElement = element.next;
 
                     new_node.next = element.next;
                     new_node.prev = element;
@@ -263,6 +263,7 @@ public class DoublyLinkedList {
 
                 //  insert and link the new node
                 // to the list.
+                assert element != null;
                 DoublyLinkedList.Node nextElement = element.next;
                 DoublyLinkedList.Node prevElement = element.prev;
 
@@ -278,17 +279,15 @@ public class DoublyLinkedList {
         if(front != null && back != null) {
             if(front == back) {
                 delete_last();
-            } else if (value == front.data) {
+            } else if (value.equals(front.data)) {
                 delete_front();
-            } else if (value == back.data) {
+            } else if (value.equals(back.data)) {
                 delete_back();
             } else {
                 DoublyLinkedList.Node element = front;
 
-                while ( element.data != value) {
-                    if(element != null) {
-                        element = element.next;
-                    }
+                while (!element.data.equals(value)) {
+                    element = element.next;
                 }
 
                 //  insert and link the new node
@@ -313,25 +312,25 @@ public class DoublyLinkedList {
     {
         DoublyLinkedList.Node currNode = front;
         int length = 0;
-        double radix = Math.round( Math.sqrt(Double.valueOf(node_count)) );
+        double radix = Math.round( Math.sqrt(node_count) );
 
-        String output = "\nFront ==>";
+        StringBuilder output = new StringBuilder("\nFront ==>");
 
         // Traverse through the DoublyLinkedList
         while (currNode != null) {
             if(length % radix == 0) {
-                output += "\n";
+                output.append("\n");
             }
 
             // Print the data at current node
-            output += "\t" + currNode.data;
+            output.append("\t").append(currNode.data);
 
             // Go to next node
             currNode = currNode.next;
             length++;
         }
-        output += "\n<== Back";
-        return output;
+        output.append("\n<== Back");
+        return output.toString();
 
         //System.out.print("Reporting Length: "+length+"\n");
         //System.out.print("Expected Length: "+node_count+"\n");
@@ -340,25 +339,25 @@ public class DoublyLinkedList {
     public String printB2F() {
         DoublyLinkedList.Node currNode = back;
         int length = 0;
-        double radix = Math.round( Math.sqrt(Double.valueOf(node_count)) );
+        double radix = Math.round( Math.sqrt(node_count) );
 
-        String output = "\nBack ==>";
+        StringBuilder output = new StringBuilder("\nBack ==>");
 
         // Traverse through the DoublyLinkedList
         while (currNode != null) {
             if(length % radix == 0) {
-                output += "\n";
+                output.append("\n");
             }
 
             // Print the data at current node
-            output += "\t" + currNode.data;
+            output.append("\t").append(currNode.data);
 
             // Go to previous node
             currNode = currNode.prev;
             length++;
         }
-        output += "\n<== Front";
-        return output;
+        output.append("\n<== Front");
+        return output.toString();
 
         //System.out.print("Reporting Length: "+length+"\n");
         //System.out.print("Expected Length: "+node_count+"\n");
