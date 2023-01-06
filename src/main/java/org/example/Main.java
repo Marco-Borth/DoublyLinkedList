@@ -151,10 +151,12 @@ public class Main {
             } else if (command.contains("reverse") || command.contains("flip")) {
 
                 // flip order of list if reverse key is entered.
-                list = sortList(list, "reverse");
+                SortedList sortedList = new SortedList(list);
+                sortedList.flipListOrder();
+                list = sortedList.list;
                 printList(list,"");
 
-            } else if (command.contains("test") || command.contains("test list") || command.contains("testlist") ) {
+            } else if (command.contains("test") || command.contains("test list") ) {
 
                 SortedList sortedList = new SortedList(list, "asc");
 
@@ -177,13 +179,13 @@ public class Main {
 
                 System.out.println("\nSUCCESS! A new Doubly Linked-List has been generated:\n");
                 printList(list,"");
-            } else {
+            } else if( !command.equals("q") && !command.equals("quit") ) {
                 System.out.println("\nERROR! Command not Valid!\n");
             }
-        } while (!command.equals("q") || !command.equals("quit"));
+        } while (!command.equals("q") && !command.equals("quit"));
     }
 
-    private static DoublyLinkedList sortList(DoublyLinkedList list, String command) throws UnsupportedEncodingException {
+    private static DoublyLinkedList sortList(DoublyLinkedList list, String command) {
         String listOrder = "asc";
         if ( command.contains("asc") || command.contains("ascending") ) {
             listOrder = "asc";
@@ -195,27 +197,23 @@ public class Main {
 
         SortedList sortedList = new SortedList(list, listOrder);
 
-        if ( command.contains("insertion") || command.contains("insertionsort") ) {
+        if ( command.contains("insertion") ) {
 
             // Use Insertion Sort Algorithm to sort list  in selected order.
             sortedList.insertionSort();
             list = sortedList.list;
-        } else if ( command.contains("selection") || command.contains("selectionsort") ) {
+        } else if ( command.contains("selection") ) {
 
             // Use Selection Sort Algorithm to sort list  in selected order.
             sortedList.selectionSort();
             list = sortedList.list;
-        } else if ( command.contains("shaker") || command.contains("shakersort")) {
+        } else if ( command.contains("shaker") ) {
 
             // Use Shaker Sort Algorithm to sort list  in selected order.
             sortedList.shakerSort();
             list = sortedList.list;
-        } else if ( command.contains("quick") || command.contains("quicksort") ) {
-            boolean useMedian = false;
-
-            if( command.contains("median") ) {
-                useMedian = true;
-            }
+        } else if ( command.contains("quick") ) {
+            boolean useMedian = command.contains("median");
 
             // Use Quick Sort Algorithm to sort list in selected order.
             sortedList.quickSort(list, 0, list.node_count, useMedian);
@@ -227,13 +225,19 @@ public class Main {
 
         } else if ( command.contains("merge") || command.contains("mergesort") ) {
 
-            // Use Quick Sort Algorithm to sort list in selected order.
-            sortedList.mergeSort(list, 0, list.node_count);
-            list = sortedList.list;
+            // FIX MERGE SORT !!!
+            //sortedList.mergeSort(list, 0, list.node_count);
+            //list = sortedList.list;
+
+            if (listOrder.equals("desc")) {
+                list = sortList(list, "quick sort desc");
+            } else {
+                list = sortList(list, "quick sort");
+            }
+
         } else {
 
             // Use Quick Sort Algorithm BY DEFAULT.
-            list = sortList(list, "quick sort");
             if (listOrder.equals("desc")) {
                 list = sortList(list, "quick sort desc");
             } else {
@@ -272,7 +276,7 @@ public class Main {
 
         //System.out.print("\n" + numValues.length +"\n");
         list.clear();
-        int index = 0;
+        //int index = 0;
 
         for (int i = 1; i < fileNodes.length; i++) {
             //System.out.print(numValues[i] + " ");
@@ -280,16 +284,16 @@ public class Main {
             if(!fileNodes[i].equals("\0") ) {
                 if(fileNodes[i].contains("\n")) {
                     String[] splitStr = fileNodes[i] .split("\n");
-                    for (int j = 0; j < splitStr.length; j++) {
-                        if( !splitStr[j].contains("<== Back") ) {
-                            list.push_back( splitStr[j] );
+                    for (String s : splitStr) {
+                        if (!s.contains("<== Back")) {
+                            list.push_back(s);
                         }
                     }
                 } else {
                     list.push_back( fileNodes[i] );
                 }
 
-                index++;
+                //index++;
             }
 
             /*
@@ -322,8 +326,6 @@ public class Main {
         Random rand = new Random();
 
         // Generate random integers in range 1 to 999
-        int rand_int = 1 + rand.nextInt(998);
-
-        return rand_int;
+        return 1 + rand.nextInt(998);
     }
 }
