@@ -1,0 +1,7 @@
+Filename: data2.txt
+
+DoublyLinkedList data:
+
+Front ==>
+	5	19	29	38	50	90	83	75	71	75
+<== Back

@@ -121,8 +121,6 @@ public class DoublyLinkedList {
                 node_count++;
             }
 
-        } else {
-            // Throw Bounds Error!
         }
     }
 

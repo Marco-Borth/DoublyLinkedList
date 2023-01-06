@@ -28,8 +28,7 @@ public class Main {
             command = br.readLine();
             System.out.println("You have entered: " + command);
 
-            if ( ( command.contains("insert") && !command.contains("insertion") )
-                    || command.contains("push") ) {
+            if ( ( command.contains("insert") && !command.contains("insertion") ) || command.contains("push") ) {
                 String input;
 
                 if (command.contains("random")) {
@@ -167,6 +166,7 @@ public class Main {
                 } else {
                     System.out.println("\nList is NOT sorted in any order.");
                 }
+
             } else if (command.contains("reset") || command.contains("generate") || command.contains("new list")) {
                 System.out.println("\nEnter how many nodes the new list will have:");
                 int newLength = Integer.parseInt(br.readLine());
@@ -183,6 +183,21 @@ public class Main {
                 System.out.println("\nERROR! Command not Valid!\n");
             }
         } while (!command.equals("q") && !command.equals("quit"));
+    }
+
+    public static void printCommands() {
+        System.out.println("\nWhat would you like to do?");
+
+        System.out.print("1. Insert random Node to the list.");
+        System.out.print("\t\t2. Delete target Node from the list.");
+        System.out.print("\t\t3. Print all Nodes in the list.\n");
+        System.out.print("4. Save list data to a file.");
+        System.out.print("\t\t\t5. Write list data from a file.");
+        System.out.print("\t\t\t\t6. Sort list data.\n");
+        System.out.print("7. Reverse order of list data.");
+        System.out.print("\t\t\t8. Check if list is sorted");
+        System.out.print("\t\t\t\t\t9. Generate a new Random list.\n");
+        System.out.println("Q. Press Q to quit.");
     }
 
     private static DoublyLinkedList sortList(DoublyLinkedList list, String command) {
@@ -252,21 +267,6 @@ public class Main {
         }
 
         return list;
-    }
-
-    public static void printCommands() {
-        System.out.println("\nWhat would you like to do?");
-
-        System.out.print("1. Insert random Node to the list.");
-        System.out.print("\t\t2. Delete target Node from the list.");
-        System.out.print("\t\t3. Print all Nodes in the list.\n");
-        System.out.print("4. Save list data to a file.");
-        System.out.print("\t\t\t5. Write list data from a file.");
-        System.out.print("\t\t\t\t6. Sort list data.\n");
-        System.out.print("7. Reverse order of list data.");
-        System.out.print("\t\t\t8. Check if list is sorted");
-        System.out.print("\t\t\t\t\t9. Generate a new Random list.\n");
-        System.out.println("Q. Press Q to quit.");
     }
 
     public static DoublyLinkedList loadListFromFile(DoublyLinkedList list, String fileName) throws IOException {
